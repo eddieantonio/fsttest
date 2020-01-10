@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "fsttest"
+version = "0.1.0"
+description = "Test FSTs"
+authors = ["Eddie Antoio Santos <Eddie.Santos@nrc-cnrc.gc.ca>"]
+license = "MPL-2.0"
+
+[tool.poetry.dependencies]
+python = "^3.6"
+toml = "^0.10.0"
+
+[tool.poetry.dev-dependencies]
+isort = "^4.3.21"
+mypy = "^0.761"
+black = "^19.10b0"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
