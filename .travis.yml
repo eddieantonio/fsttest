@@ -1,0 +1,12 @@
+dist: xenial
+language: python
+python:
+- '3.6'
+- '3.7'
+before_install:
+- pip install poetry
+- poetry config settings.virtualenvs.in-project true
+install:
+- poetry install -vv
+script:
+- pytest
