@@ -204,7 +204,7 @@ def execute_test_case(fst_path: Path, test_case: dict) -> TestResults:
     """
 
     if "expect" not in test_case:
-        raise TestCaseDefinitionError('Missing "except" in test case')
+        raise TestCaseDefinitionError('Missing "expect" in test case')
     expected = test_case["expect"]
 
     if "upper" in test_case:
