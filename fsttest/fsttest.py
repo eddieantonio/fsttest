@@ -16,7 +16,8 @@ import toml
 
 # Exit codes
 _EX_BASE = 0x40
-EX_HAS_FAILED_TEST_CASES = _EX_BASE + 1
+EX_NO_TEST_CASES = _EX_BASE + 1
+EX_HAS_FAILED_TEST_CASES = _EX_BASE + 2
 
 
 # ############################### Exceptions ############################### #
@@ -192,6 +193,9 @@ def run_tests(test_dir: Path) -> None:
         print(f"💥 Failed {results.n_failed} test cases 😭😭😭", end=" ")
         print(f"({results.n_passed}/{results.n_total}) passed")
         sys.exit(EX_HAS_FAILED_TEST_CASES)
+    elif results.n_total == 0:
+        print(f"No FST test cases found. 🤔")
+        sys.exit(EX_NO_TEST_CASES)
     else:
         print(f"{results.n_passed}/{results.n_total} tests passed! ✨ 🍰 ✨")
 
