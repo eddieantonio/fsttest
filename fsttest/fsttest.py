@@ -10,8 +10,9 @@ from shutil import which
 from tempfile import TemporaryDirectory, TemporaryFile
 from typing import Dict, List
 
-import blessings
 import toml
+from blessings import Terminal
+
 
 # ############################### Constants ################################ #
 
@@ -20,6 +21,10 @@ _EX_BASE = 0x40
 EX_NO_TEST_CASES = _EX_BASE + 1
 EX_HAS_FAILED_TEST_CASES = _EX_BASE + 2
 
+
+# ################################ Globals ################################# #
+
+term = Terminal()
 
 # ############################### Exceptions ############################### #
 
@@ -64,7 +69,7 @@ class TestResults:
         Call this when a test fails.
         """
         self.n_failed += 1
-        print(message, file=sys.stderr)
+        print(f"{term.red}message{term.normal}", file=sys.stderr)
 
     def count_passed_test(self) -> None:
         self.n_passed += 1
@@ -191,14 +196,16 @@ def run_tests(test_dir: Path) -> None:
         results.update_in_place(results_from_test_suite)
 
     if results.has_test_failures:
-        print(f"💥 Failed {results.n_failed} test cases 😭😭😭", end=" ")
-        print(f"({results.n_passed}/{results.n_total}) passed")
+        print(f"💥 {term.red}Failed {results.n_failed} test cases{term.normal} 😭😭😭")
+        print(f"{term.bold}({results.n_passed}/{results.n_total}) passed{term.normal}")
         sys.exit(EX_HAS_FAILED_TEST_CASES)
     elif results.n_total == 0:
-        print(f"No FST test cases found. 🤔")
+        print(f"{term.red}No FST test cases found.{term.normal} 🤔")
         sys.exit(EX_NO_TEST_CASES)
     else:
-        print(f"{results.n_passed}/{results.n_total} tests passed! ✨ 🍰 ✨")
+        print(
+            f"{term.bold}{results.n_passed}/{results.n_total} tests passed!{term.normal} ✨ 🍰 ✨"
+        )
 
 
 def execute_test_case(fst_path: Path, test_case: dict) -> TestResults:

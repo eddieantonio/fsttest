@@ -8,6 +8,7 @@ license = "MPL-2.0"
 [tool.poetry.dependencies]
 python = "^3.6"
 toml = "^0.10.0"
+blessings = "^1.7"
 
 [tool.poetry.dev-dependencies]
 isort = "^4.3.21"
