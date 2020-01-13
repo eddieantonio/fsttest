@@ -1,0 +1,11 @@
+# Python caches
+__pycache__/
+*.pyo
+*.pyd
+
+# Static checking
+.coverage/
+.mypy_cache/
+
+# Packaging
+*.egg-info
