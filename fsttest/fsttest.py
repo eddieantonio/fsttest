@@ -122,8 +122,6 @@ def determine_foma_args(raw_fst_description: dict) -> List[str]:
         regex = " .o. ".join(compose)
         args += ["-e", f"regex {regex};"]
 
-    print(args)
-
     return args
 
 
@@ -153,7 +151,7 @@ def run_test_suite_from_filename(test_file: Path) -> TestResults:
         base = Path(tempdir)
         fst_path = base / "tmp.fomabin"
         status = subprocess.check_call(
-            ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s",]
+            ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
         )
 
         # now use it
@@ -307,13 +305,3 @@ def create_temporary_input_file(contents: str):
         input_file.write("\n")
         input_file.seek(0)
         yield input_file
-
-
-def main():
-    run_tests(Path("tests"))
-
-
-# ################################## Main ################################## #
-
-if __name__ == "__main__":
-    main()

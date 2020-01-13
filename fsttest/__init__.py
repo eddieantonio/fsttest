@@ -12,6 +12,7 @@ from .fsttest import (
     execute_test_case,
     run_tests,
 )
+from .__version__ import VERSION as __version__
 
 __all__ = [
     "FSTTestError",
