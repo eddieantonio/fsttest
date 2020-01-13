@@ -7,7 +7,7 @@ python:
 addons:
   apt:
     packages:
-    - foma
+    - foma-bin
 
 before_install:
 - pip install poetry
