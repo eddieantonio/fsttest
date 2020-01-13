@@ -4,9 +4,8 @@
 import argparse
 from pathlib import Path
 
-from fsttest import run_tests
 from fsttest import __version__ as VERSION
-
+from fsttest import run_tests
 
 parser = argparse.ArgumentParser(prog="fsttest", description="Test FOMA FSTs")
 parser.add_argument("--version", action="version", version=f"%(prog)s {VERSION}")

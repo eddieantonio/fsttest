@@ -10,6 +10,7 @@ from shutil import which
 from tempfile import TemporaryDirectory, TemporaryFile
 from typing import Dict, List
 
+import blessings
 import toml
 
 # ############################### Constants ################################ #
