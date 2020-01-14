@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 """
-FST test -- test your finite-state transducers!
+FST test -- test your Foma finite-state transducers!
 """
 
 from .__version__ import VERSION as __version__
