@@ -69,7 +69,7 @@ class TestResults:
         Call this when a test fails.
         """
         self.n_failed += 1
-        print(f"{term.red}message{term.normal}", file=sys.stderr)
+        print(f"{term.red}{message}{term.normal}", file=sys.stderr)
 
     def count_passed_test(self) -> None:
         self.n_passed += 1

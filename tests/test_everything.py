@@ -38,7 +38,7 @@ def test_failed_test_case(a_b_transducer_path: Path, capsys):
     assert "Failure" in captured.err
     assert "Given: 'a'" in captured.err
     assert "Expected: 'a'" in captured.err
-    assert "got: 'b'" in captured.err
+    assert "got: ['b']" in captured.err
 
 
 @pytest.fixture
