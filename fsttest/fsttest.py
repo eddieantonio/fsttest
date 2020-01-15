@@ -11,8 +11,9 @@ from tempfile import TemporaryDirectory, TemporaryFile
 from typing import Dict, List
 
 import toml
+from blessings import Terminal  # type: ignore
 
-from blessings import Terminal
+from .exceptions import TestCaseDefinitionError
 
 # ############################### Constants ################################ #
 
@@ -25,20 +26,6 @@ EX_HAS_FAILED_TEST_CASES = _EX_BASE + 2
 # ################################ Globals ################################# #
 
 term = Terminal()
-
-# ############################### Exceptions ############################### #
-
-
-class FSTTestError(Exception):
-    """
-    Base class for all exceptions in FST Test.
-    """
-
-
-class TestCaseDefinitionError(FSTTestError):
-    """
-    Should be raised when there's an issue parsing a test suite.
-    """
 
 
 # ################################ Classes ################################# #

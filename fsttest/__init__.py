@@ -6,13 +6,8 @@ FST test -- test your Foma finite-state transducers!
 """
 
 from .__version__ import VERSION as __version__
-from .fsttest import (
-    FSTTestError,
-    TestCaseDefinitionError,
-    TestResults,
-    execute_test_case,
-    run_tests,
-)
+from .exceptions import FSTTestError, TestCaseDefinitionError
+from .fsttest import TestResults, execute_test_case, run_tests
 
 __all__ = [
     "FSTTestError",
