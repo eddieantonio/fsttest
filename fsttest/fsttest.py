@@ -11,8 +11,8 @@ from tempfile import TemporaryDirectory, TemporaryFile
 from typing import Dict, List
 
 import toml
-from blessings import Terminal
 
+from blessings import Terminal
 
 # ############################### Constants ################################ #
 
