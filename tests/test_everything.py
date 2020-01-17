@@ -11,7 +11,7 @@ import pytest  # type: ignore
 
 # Pytest will try to run tests here.
 from fsttest import TestCaseDefinitionError as _TestCaseDefinitionError
-from fsttest import execute_test_case
+from fsttest import execute_test_case, load_fst
 
 
 def test_transduce_upper_to_lower(a_b_transducer_path: Path):
@@ -60,6 +60,21 @@ def test_invalid_test_case(a_b_transducer_path: Path):
     test_case = {"upper": "a"}
     with pytest.raises(_TestCaseDefinitionError):
         execute_test_case(a_b_transducer_path, test_case)
+
+
+def test_load_fst(a_b_transducer_path: Path):
+    """
+    Test that the FST can be loaded from a path.
+    """
+
+    # Check that we can load this FST directly.
+    fst_desc = {"fomabin": a_b_transducer_path}
+    test_case = {"upper": "a", "expect": "b"}
+
+    with load_fst(fst_desc) as fst_path:
+        results = execute_test_case(fst_path, test_case)
+    assert results.n_passed == 1
+    assert results.n_total == 1
 
 
 @pytest.fixture

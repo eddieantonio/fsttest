@@ -119,6 +119,17 @@ def determine_foma_args(raw_fst_description: dict) -> List[str]:
     return args
 
 
+# TODO: returns something useful...
+@contextmanager
+def load_fst(fst_desc: dict) -> Path:
+    if "fomabin" in fst_desc:
+        path = Path(fst_desc["fomabin"])
+        assert path.exists()
+        yield path
+    else:
+        raise NotImplementedError
+
+
 def run_test_suite_from_filename(test_file: Path) -> TestResults:
     """
     Given a file path, parses the test suite, and runs all of the tests
