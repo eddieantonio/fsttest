@@ -8,12 +8,12 @@ from contextlib import contextmanager
 from pathlib import Path
 from shutil import which
 from tempfile import TemporaryDirectory, TemporaryFile
-from typing import Dict, List
+from typing import Dict, List, Generator
 
 import toml
 from blessings import Terminal  # type: ignore
 
-from .exceptions import TestCaseDefinitionError
+from .exceptions import TestCaseDefinitionError, FSTTestError
 
 # ############################### Constants ################################ #
 
@@ -119,9 +119,8 @@ def determine_foma_args(raw_fst_description: dict) -> List[str]:
     return args
 
 
-# TODO: returns something useful...
 @contextmanager
-def load_fst(fst_desc: dict) -> Path:
+def load_fst(fst_desc: dict) -> Generator[Path, None, None]:
     if "fomabin" in fst_desc:
         path = Path(fst_desc["fomabin"])
         assert path.exists()
