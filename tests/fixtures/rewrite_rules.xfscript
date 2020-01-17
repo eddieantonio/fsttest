@@ -1,0 +1,6 @@
+# rewrite_rules.xfscript
+define Vowel    a | e | i | o | u ;
+
+define TInsertion [..] -> t || [n i | k i] "<" _ Vowel ;
+define NiTDeletion n i "<" t -> d || _ Vowel ;
+define Cleanup %< -> 0 ;

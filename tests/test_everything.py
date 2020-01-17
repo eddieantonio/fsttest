@@ -62,9 +62,9 @@ def test_invalid_test_case(a_b_transducer_path: Path):
         execute_test_case(a_b_transducer_path, test_case)
 
 
-def test_load_fst(a_b_transducer_path: Path):
+def test_load_fst_from_fomabin(a_b_transducer_path: Path):
     """
-    Test that the FST can be loaded from a path.
+    Test that the FST can be loaded from a fomabin.
     """
 
     # Check that we can load this FST directly.
@@ -77,11 +77,38 @@ def test_load_fst(a_b_transducer_path: Path):
     assert results.n_total == 1
 
 
+def test_load_fst_from_xfst_file(rewrite_rules_path: Path):
+    """
+    Test that the FST can be loaded from an XFST script.
+    """
+    fst_desc = {"eval": rewrite_rules_path, "regex": "Cleanup"}
+    test_case = {"upper": "<", "expect": ""}
+    with load_fst(fst_desc) as fst_path:
+        results = execute_test_case(fst_path, test_case)
+    assert results.n_passed == 1
+    assert results.n_total == 1
+
+
 @pytest.fixture
-def a_b_transducer_path():
+def a_b_transducer_path() -> Path:
     """
     Transduces a (upper) to b (lower).
     """
     path = Path(__file__).parent / "fixtures" / "ab.fomabin"
+    assert path.exists()
+    return path
+
+
+@pytest.fixture
+def rewrite_rules_path() -> Path:
+    """
+    Returns the path to an XFST script with the following defined regexes:
+
+     - Vowel
+     - TInsertion
+     - NiTDeletion
+     - Cleanup
+    """
+    path = Path(__file__).parent / "fixtures" / "rewrite_rules.xfscript"
     assert path.exists()
     return path
