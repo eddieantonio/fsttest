@@ -95,14 +95,19 @@ def determine_foma_args(raw_fst_description: dict) -> List[str]:
     the foma stack.
     """
 
+    # What the TOML looks like:
+    #     "fst": {"eval": "phon_rules.xfscript", "regex": "TInsertion"},
+
     args: List[str] = []
 
     # First, load whatever needs to be loaded.
     if "eval" in raw_fst_description:
+        # Load an XFST script
         file_to_eval = Path(raw_fst_description["eval"])
         assert file_to_eval.exists()
         args += ["-l", str(file_to_eval)]
     elif "fomabin" in raw_fst_description:
+        # Load a fomabin
         path = Path(raw_fst_description["fomabin"])
         assert path.exists()
         args += ["-e", f"load stack {path}"]
@@ -128,6 +133,13 @@ def determine_foma_args(raw_fst_description: dict) -> List[str]:
 
 @contextmanager
 def load_fst(fst_desc: dict) -> Generator[Path, None, None]:
+    """
+    Loads an FST and yields its path. When finished using the FST, the path
+    may no longer be used. Intended to be used in a with-statement:
+
+        with load_fst({"eval": "./path/to/script.xfscript"}) as fst_path:
+            ... # use fst_path
+    """
     foma_args = determine_foma_args(fst_desc)
 
     with TemporaryDirectory() as tempdir:
@@ -146,35 +158,24 @@ def run_test_suite_from_filename(test_file: Path) -> TestResults:
     contained therein.
     """
     # Output looks like this:
-    #
-    # {
-    #     "fst": {"eval": "phon_rules.xfscript", "regex": "TInsertion"},
-    #     "tests": [
-    #         {"upper": "ki<ajan", "expect": "kitajan"},
-    #         {"upper": "ni<ajan", "expect": "nitajan"},
-    #     ],
-    # }
     raw_test_case = toml.load(test_file)
-
-    fst_desc = raw_test_case["fst"]
-    foma_args = determine_foma_args(fst_desc)
 
     results = TestResults()
 
-    with TemporaryDirectory() as tempdir:
-        # Compile the FST first...
-        base = Path(tempdir)
-        fst_path = base / "tmp.fomabin"
-        status = subprocess.check_call(
-            ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
-        )
-
-        # now use it
+    fst_desc = raw_test_case["fst"]
+    with load_fst(fst_desc) as fst_path:
+        # Raw test cases look like this:
+        # {
+        #     "tests": [
+        #         {"upper": "ki<ajan", "expect": "kitajan"},
+        #         {"upper": "ni<ajan", "expect": "nitajan"},
+        #     ],
+        # }
         for test_case in raw_test_case["tests"]:
             results_from_test_case = execute_test_case(fst_path, test_case)
             results.update_in_place(results_from_test_case)
 
-        return results
+    return results
 
 
 def run_tests(test_dir: Path) -> None:
