@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "fsttest"
-version = "0.1.1"
+version = "0.2.0"
 description = "Test Foma FSTs"
 authors = ["Eddie Antoio Santos <Eddie.Santos@nrc-cnrc.gc.ca>"]
 license = "MPL-2.0"
