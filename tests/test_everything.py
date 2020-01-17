@@ -89,6 +89,20 @@ def test_load_fst_from_xfst_file(rewrite_rules_path: Path):
     assert results.n_total == 1
 
 
+def test_load_fst_from_xfst_with_compose(rewrite_rules_path: Path):
+    """
+    Using the 'compose' feature to load an XFST script with multiple defined
+    regexes.
+    """
+    rules = ["TInsertion", "NiTDeletion", "Cleanup"]
+    fst_desc = {"eval": rewrite_rules_path, "compose": rules}
+    test_case = {"upper": "ni<ayaa<n", "expect": "dayaan"}
+    with load_fst(fst_desc) as fst_path:
+        results = execute_test_case(fst_path, test_case)
+    assert results.n_passed == 1
+    assert results.n_total == 1
+
+
 @pytest.fixture
 def a_b_transducer_path() -> Path:
     """
