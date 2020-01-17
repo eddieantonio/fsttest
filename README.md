@@ -31,11 +31,11 @@ compose = ["TInsertion", "NiTDeletion", "Cleanup"]
 
 [[tests]]
 upper = "ni<ayaa<n"
-expect = "dayaa<n"
+expect = "dayaan"
 
 [[tests]]
 lower = "ki<tayaa<n"
-expect = "ki<ayaa<n"
+expect = "kiayaan"
 ```
 
 Then run the test!
