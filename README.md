@@ -11,6 +11,19 @@ Install
 Usage
 -----
 
+Write `test_*.toml` scripts in a folder called `tests/`, then run:
+
+    $ fsttest
+
+
+Documentation
+-------------
+
+ * [How to specify the FST under test](./docs/fst-under-test')
+
+Tutorial
+--------
+
 In your FST project, create a folder called `tests/`:
 
     $ mkdir tests
