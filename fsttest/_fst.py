@@ -38,8 +38,26 @@ class FST:
     def path(self) -> Path:
         return self._path
 
-    def apply(self, inputs: List[str], direction: str = "down") -> Dict[str, List[str]]:
-        raise NotImplementedError
+    def apply(self, inputs: List[str], direction: str = "up") -> Dict[str, List[str]]:
+        if direction == "down":
+            flookup_flags = []
+        elif direction == "up":
+            flookup_flags = ["-i"]
+        else:
+            raise ValueError(
+                f'direction must be "up" or "down"; got {direction!r} instead'
+            )
+
+        assert all("\n" not in inp for inp in inputs)
+        fst_input = "\n".join(inputs)
+        with create_temporary_input_file(contents=fst_input) as input_file:
+            output = subprocess.check_output(
+                ["flookup", *flookup_flags, str(self.path)],
+                encoding="UTF-8",
+                stdin=input_file,
+            )
+
+        return parse_lookup_output(output)
 
     @staticmethod
     def load_from_description(fst_desc: Dict[str, Any]) -> FST:

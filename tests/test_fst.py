@@ -13,6 +13,9 @@ from fsttest import FST
 
 
 def test_path_exists_only_during_command_fomabin(a_b_transducer_path: Path):
+    """
+    Test that a new Fomabin is created and disappears after the context.
+    """
     fst_desc = {"fomabin": a_b_transducer_path}
     with FST.load_from_description(fst_desc) as fst:
         assert fst.path.exists()
@@ -31,3 +34,10 @@ def test_path_exists_only_during_command_xfst(fst_desc, rewrite_rules_path: Path
     with FST.load_from_description(fst_desc) as fst:
         assert fst.path.exists()
     assert not fst.path.exists()
+
+
+def test_fst_execute_fomabin(a_b_transducer_path: Path):
+    fst_desc = {"fomabin": a_b_transducer_path}
+    with FST.load_from_description(fst_desc) as fst:
+        results = fst.apply(["a"], direction="up")
+    assert results == {"a": ["b"]}
