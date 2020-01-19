@@ -1,12 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
-import subprocess
 import sys
 from contextlib import contextmanager
 from pathlib import Path
-from shutil import which
-from typing import Any, Dict, Generator, List
+from typing import Any, Dict, Generator
 
 import toml
 from blessings import Terminal  # type: ignore
