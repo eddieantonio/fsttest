@@ -8,12 +8,12 @@ from contextlib import contextmanager
 from pathlib import Path
 from shutil import which
 from tempfile import TemporaryDirectory, TemporaryFile
-from typing import Dict, List, Generator
+from typing import Dict, Generator, List
 
 import toml
 from blessings import Terminal  # type: ignore
 
-from .exceptions import TestCaseDefinitionError, FSTTestError
+from .exceptions import FSTTestError, TestCaseDefinitionError
 
 # ############################### Constants ################################ #
 
