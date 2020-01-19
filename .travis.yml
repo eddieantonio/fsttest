@@ -16,13 +16,13 @@ install:
 script:
 - mypy fsttest
 - pytest
-before_deploy:
-  - poetry build
+
+env:
+  global:
+    secure: oVM+8WlICvktm8unjMoI4YxgSv5Zuq27aeLe9SvatMlZXmdTURyVvtLVK8DobEF1r52cxyuIRM4nW4k9Txq1kpYByjLKWSolROxBgZFvGodJYKAVOqlGhD57iNriCBx+APfuWXHtd0u5DLCd8WmqvNUzLKEmUDo75lzM7zN0mYTMVOh34/a49+Bmr96ktj/9YtnHWg1/4Ww7UKz3DvdkhxwUBMx/ysY7W0n7/NyzB63TwEHQGHaQfXhn3ENLGqcvx06/v7vTocHv/BQQ6VyzArx1/nDQviccPQlgtfww996mIWchSQkr6+k9wt+tO1vnVF5d2mAI7AwLZtKuHSp+FjC1DzKN6wtxIME8Vv53LX+nv4Yn6GN7vCleVxWzwvHYCr3a5t618wSu0Yj0E8sfodIFKS2CocpYkoCO2rItS1hUXfiDIq7Q2RWFciqx9NoCDxe/Oh1u/l9Jks8JQ13J7NPt3ChKPWycvvAPLaTCwqRilK1+9rPm2Nx+/j5+mqmfcZtDnJ9k/Hbi0x7I4Own6dYyzh6L4otlNDk3BwbFFkXIzzZ6R2smYkgWT/PUDNfdF5cdPL8KZsTR+EEdBdwbYJIPeai6m2Nv2tc0o7cDw02gDu1WgOxHRr2wK9gq9hu/4u2sQnQ8l2Dj2JUaawGfW/MwWcNnx2AO//cnKjbSc5w=
 
 deploy:
-  provider: pypi
-  username: "__token__"
-  password:
-    secure: SNnck3xQ1V4s1q4z9Ec/LAZKD3bHwUKEHo1m7lnrFfGohp40ISmeCFehRSCG0d+SuSh3Uo0n3ljz8RvmH04x8n3yLy23QpoMjvz559SBR6bh/B7W8XuZ/jMAyxPg1gt8mUc7GAN11dTBDBAprlseGQKsHqqwGBe3tQh5J5cLvUtXT8Bw7JgyZbEK29lUL4KWxbBIVeSVgpP0gNiONjtjcQQVJ4BoPO5An+IJ7ceGZwWGh5WCCnl9B6pCYVih3uXzurBuCcuhrAUTCnqyxfRZR2atwpRkyZ9NVsCBnMyuSgSmuUTusNHs97cc3IFl770jgRViWDTix2u2e0iOM55yVN9tOih6ZBazmMT7VzENGbC47rZD9F51yTF4uDGg/NHHpF3sJZyZBijzxXK+41M2s6S08N7XhS6A+YwXXmAKB8L1hdUqIJiY3nd8ClWGBMHKpvDTmjSdj/avvj9hTWWA1HeisxB0qipYG01nYEXyPiIdbSI/bPdANPvjgkGKVrJ6j/9Mg81tmqDXe9wj6FsRqSBSsS7xktTQ/bwSUhctB5V7ZzESQqi3Y+pQly58g8MFJ/zAW3jBUt9b1VfQl5k7wk3ks4MfPiWSe0x5E7GQZnO45MlOWxkQ5M5bx2ty1dXZaVCVfaOTaNcVvj9r3Qn7k/Eq7J0Ht3gtHkrD2LU+7A0=
+  provider: script
+  script: poetry publish --build --username=__token__ --password="$PYPI_API_KEY"
   on:
     tags: true
