@@ -22,6 +22,13 @@ class FST:
             ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
         )
 
+    def __enter__(self) -> FST:
+        # Intiailization already done in __init__
+        return self
+
+    def __exit__(self, _exec_type, _exec, _stack):
+        ...
+
     @property
     def path(self) -> Path:
         return self._path
@@ -45,8 +52,8 @@ class FST:
             base = Path(tempdir)
             fst_path = base / "tmp.fomabin"
             foma_args = determine_foma_args(fst_desc)
-            fst = FST(fst_path, foma_args)
-            yield fst.path
+            with FST(fst_path, foma_args) as fst:
+                yield fst.path
 
 
 def determine_foma_args(raw_fst_description: dict) -> List[str]:
