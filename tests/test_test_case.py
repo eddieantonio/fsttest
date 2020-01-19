@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
+import sys
 from pathlib import Path
 
 import pytest  # type: ignore
@@ -49,3 +50,21 @@ def test_execute_failing_test_case(a_b_transducer_path: Path):
     assert result.input == "a"
     assert result.expected == "a"
     assert result.actual == ["b"]
+
+
+def test_print_failed_test(capsys):
+    """
+    Tests
+    """
+
+    res = FailedTestResult(
+        location="test_verbs.toml", given="a", expected="a", actual=["b"]
+    )
+
+    print(res, file=sys.stderr)
+
+    captured = capsys.readouterr()
+    assert "Failure" in captured.err
+    assert "Given: 'a'" in captured.err
+    assert "Expected: 'a'" in captured.err
+    assert "got: ['b']" in captured.err

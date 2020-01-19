@@ -123,6 +123,14 @@ class FailedTestResult:
     def actual(self) -> str:
         return self._actual
 
+    def __str__(self) -> str:
+        return (
+            "Failure:\n"
+            f"  Given: {self.input!r}\n"
+            f"  Expected: {self.expected!r}\n"
+            f"  Instead, got: {self.actual!r}"
+        )
+
 
 class TestResults:
     """
