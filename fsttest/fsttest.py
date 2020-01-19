@@ -102,7 +102,7 @@ class FailedTestResult:
     """
 
     def __init__(
-        self, given: str, expected: str, actual: Any, location: Optional[Path]
+        self, given: str, expected: str, actual: Any, location: Optional[Path] = None
     ):
         self._location = location
         self._input = given

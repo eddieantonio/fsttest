@@ -34,3 +34,24 @@ def test_can_count_a_test_failure() -> None:
     assert results.n_total == 1
     assert results.has_test_failures
     assert results.location_of_test_failures == {Path("test_verbs.toml")}
+
+
+def test_update_test_results_in_place() -> None:
+    results = _TestResults()
+    results.append(FailedTestResult(given="a", expected="a", actual=["b"]))
+    assert results.n_total == 1
+    assert results.n_failed == 1
+    assert results.location_of_test_failures == {None}
+
+    other_results = _TestResults()
+    other_results.append(PassedTestResult(location=Path("test_awesome.toml")))
+    other_results.append(
+        FailedTestResult(
+            given="b", expected="a", actual=["+?"], location=Path("test_verbs.toml")
+        )
+    )
+
+    results.update_in_place(other_results)
+    assert results.n_total == 3
+    assert results.n_failed == 2
+    assert results.location_of_test_failures == {Path("test_verbs.toml")}
