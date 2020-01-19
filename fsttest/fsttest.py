@@ -33,9 +33,10 @@ class TestCase:
     An executable test case.
     """
 
-    def __init__(self, input_: str, expected: str):
+    def __init__(self, input_: str, expected: str, direction: str):
         self.input = input_
         self.expected = expected
+        self.direction = direction
 
     @staticmethod
     def from_description(raw_test_case: Dict[str, Any]) -> "TestCase":
@@ -48,15 +49,15 @@ class TestCase:
         expected = raw_test_case["expect"]
 
         if "upper" in raw_test_case:
-            direction = "up"
+            direction = "down"
             fst_input = raw_test_case["upper"]
         elif "lower" in raw_test_case:
-            direction = "down"
+            direction = "up"
             fst_input = raw_test_case["lower"]
         else:
             raise TestCaseDefinitionError('Missing "upper" or "lower" in test case')
 
-        return TestCase(fst_input, expected)
+        return TestCase(fst_input, expected, direction)
 
 
 class TestResults:
@@ -184,10 +185,10 @@ def execute_test_case(fst_path: Path, test_case: dict) -> TestResults:
     expected = test_case["expect"]
 
     if "upper" in test_case:
-        direction = "up"
+        direction = "down"
         fst_input = test_case["upper"]
     elif "lower" in test_case:
-        direction = "down"
+        direction = "up"
         fst_input = test_case["lower"]
     else:
         raise TestCaseDefinitionError('Missing "upper" or "lower" in test case')

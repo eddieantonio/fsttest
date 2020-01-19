@@ -43,9 +43,11 @@ class FST:
         return self._path
 
     def apply(self, inputs: List[str], direction: str = "up") -> Dict[str, List[str]]:
-        if direction == "down":
+        if direction == "up":
+            # flookup, as its name implies, does looks UP by default.
             flookup_flags = []
-        elif direction == "up":
+        elif direction == "down":
+            # We invert to fst to look DOWN instead.
             flookup_flags = ["-i"]
         else:
             raise ValueError(

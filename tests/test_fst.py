@@ -30,7 +30,7 @@ def test_load_from_path(a_b_transducer_path: Path):
         assert fst.path.exists()
         assert fst.path != a_b_transducer_path
 
-        assert fst.apply(["a"], direction="up") == {"a": ["b"]}
+        assert fst.apply(["a"], direction="down") == {"a": ["b"]}
 
     assert not fst.path.exists()
 
@@ -52,5 +52,5 @@ def test_path_exists_only_during_command_xfst(fst_desc, rewrite_rules_path: Path
 def test_fst_execute_fomabin(a_b_transducer_path: Path):
     fst_desc = {"fomabin": a_b_transducer_path}
     with FST.load_from_description(fst_desc) as fst:
-        results = fst.apply(["a"], direction="up")
+        results = fst.apply(["a"], direction="down")
     assert results == {"a": ["b"]}
