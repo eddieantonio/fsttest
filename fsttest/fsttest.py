@@ -178,7 +178,6 @@ class TestResults:
         Call this when a test fails.
         """
         self._n_failed += 1
-        print(f"{term.red}{message}{term.normal}", file=sys.stderr)
 
     def count_passed_test(self) -> None:
         self.n_passed += 1
@@ -281,11 +280,9 @@ def execute_test_case(fst_path: Path, raw_test_case: Dict[str, Any]) -> TestResu
         result = test_case.execute(fst)
 
     results = TestResults()
-    if isinstance(result, PassedTestResult):
-        results.count_passed_test()
-    elif isinstance(result, FailedTestResult):
-        results.count_test_failure(str(result))
-    else:
-        raise FSTTestError("Could not match input with output")
+    results.append(result)
+    # TODO: the print should not happen here :/
+    if isinstance(result, FailedTestResult):
+        print(f"{term.red}{result}{term.normal}", file=sys.stderr)
 
     return results
