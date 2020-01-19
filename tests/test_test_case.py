@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
 
+from pathlib import Path
+
 import pytest  # type: ignore
 
-from fsttest import PassedTestResult
+from fsttest import FST, PassedTestResult
 from fsttest import TestCase as _TestCase
 
 
@@ -38,3 +40,12 @@ def test_create_passed_test_from_test_case(raw_test_case, location):
     t = _TestCase.from_description(raw_test_case, location=location)
     res = PassedTestResult.from_test_case(t)
     assert t.location == res.location
+
+
+def test_execute_passing_test_case(a_b_transducer_path: Path):
+    test_case = _TestCase.from_description(
+        {"upper": "a", "expect": "b"}, location="test_verbs.toml"
+    )
+    with FST.load_from_path(a_b_transducer_path) as fst:
+        result = test_case.execute(fst)
+    assert isinstance(result, PassedTestResult)
