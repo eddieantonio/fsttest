@@ -19,6 +19,7 @@ def test_can_count_a_passed_test() -> None:
     assert results.n_passed == 1
     assert results.n_total == 1
     assert not results.has_test_failures
+    assert len(results.location_of_test_failures) == 0
 
 
 def test_can_count_a_test_failure() -> None:
@@ -32,3 +33,4 @@ def test_can_count_a_test_failure() -> None:
     assert results.n_passed == 0
     assert results.n_total == 1
     assert results.has_test_failures
+    assert results.location_of_test_failures == {"test_verbs.toml"}
