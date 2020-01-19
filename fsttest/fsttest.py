@@ -13,6 +13,7 @@ from typing import Dict, Generator, List
 import toml
 from blessings import Terminal  # type: ignore
 
+from ._fst import determine_foma_args
 from .exceptions import FSTTestError, TestCaseDefinitionError
 
 # ############################### Constants ################################ #
@@ -86,49 +87,6 @@ def ensure_foma_is_executable() -> None:
         raise FSTTestError("Could not find foma! Is it it installed?")
     if which("flookup") is None:
         raise FSTTestError("Could not find flookup! Is foma installed?")
-
-
-def determine_foma_args(raw_fst_description: dict) -> List[str]:
-    """
-    Given an FST description, this parses it and returns arguments to be
-    passed to foma(1) in order to leave the desired tranducer on the top of
-    the foma stack.
-    """
-
-    # What the TOML looks like:
-    #     "fst": {"eval": "phon_rules.xfscript", "regex": "TInsertion"},
-
-    args: List[str] = []
-
-    # First, load whatever needs to be loaded.
-    if "eval" in raw_fst_description:
-        # Load an XFST script
-        file_to_eval = Path(raw_fst_description["eval"])
-        assert file_to_eval.exists()
-        args += ["-l", str(file_to_eval)]
-    elif "fomabin" in raw_fst_description:
-        # Load a fomabin
-        path = Path(raw_fst_description["fomabin"])
-        assert path.exists()
-        args += ["-e", f"load stack {path}"]
-    else:
-        raise FSTTestError(f"Don't know how to read FST from: {raw_fst_description}")
-
-    # TODO: implement other forms of loading the fst
-
-    if "regex" in raw_fst_description:
-        regex = raw_fst_description["regex"]
-        assert isinstance(regex, str)
-        args += ["-e", f"regex {regex};"]
-    elif "compose" in raw_fst_description:
-        compose = raw_fst_description["compose"]
-        assert isinstance(compose, list)
-        # .o. is the compose regex operation
-        regex = " .o. ".join(compose)
-        args += ["-e", f"regex {regex};"]
-    # else, it uses whatever is on the top of the stack.
-
-    return args
 
 
 @contextmanager
