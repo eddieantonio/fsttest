@@ -48,8 +48,9 @@ class TestCase:
         ), f"Expected to find {self.input} in {transductions}"
 
         actual_transductions = transductions[self.input]
+
         if self.expected in actual_transductions:
-            return PassedTestResult.from_test_case(self)
+            return PassedTestResult(location=self.location)
         else:
             return FailedTestResult(
                 given=self.input,
@@ -93,10 +94,6 @@ class PassedTestResult:
     @property
     def location(self) -> Optional[str]:
         return self._location
-
-    @staticmethod
-    def from_test_case(test_case: TestCase) -> "PassedTestResult":
-        return PassedTestResult(test_case.location)
 
 
 class FailedTestResult:

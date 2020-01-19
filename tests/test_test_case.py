@@ -29,19 +29,6 @@ def test_create_test_case(
     assert t.location == location
 
 
-@pytest.mark.parametrize(
-    "raw_test_case,location",
-    [
-        ({"upper": "a", "expect": "b"}, "test_verbs.toml"),
-        ({"lower": "b", "expect": "a"}, None),
-    ],
-)
-def test_create_passed_test_from_test_case(raw_test_case, location):
-    t = _TestCase.from_description(raw_test_case, location=location)
-    res = PassedTestResult.from_test_case(t)
-    assert t.location == res.location
-
-
 def test_execute_passing_test_case(a_b_transducer_path: Path):
     test_case = _TestCase.from_description(
         {"upper": "a", "expect": "b"}, location="test_verbs.toml"
