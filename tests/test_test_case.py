@@ -54,7 +54,7 @@ def test_execute_failing_test_case(a_b_transducer_path: Path):
 
 def test_print_failed_test(capsys):
     """
-    Tests
+    Test that the failure is formatted upon output.
     """
 
     res = FailedTestResult(
@@ -64,6 +64,7 @@ def test_print_failed_test(capsys):
     print(res, file=sys.stderr)
 
     captured = capsys.readouterr()
+    assert "test_verbs.toml: " in captured.err
     assert "Failure" in captured.err
     assert "Given: 'a'" in captured.err
     assert "Expected: 'a'" in captured.err
