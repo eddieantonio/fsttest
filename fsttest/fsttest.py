@@ -3,7 +3,6 @@
 
 import subprocess
 import sys
-from collections import defaultdict
 from contextlib import contextmanager
 from pathlib import Path
 from shutil import which
@@ -13,7 +12,7 @@ from typing import Any, Dict, Generator, List
 import toml
 from blessings import Terminal  # type: ignore
 
-from ._fst import FST, determine_foma_args
+from ._fst import FST, parse_lookup_output
 from .exceptions import FSTTestError, TestCaseDefinitionError
 
 # ############################### Constants ################################ #
@@ -211,54 +210,6 @@ def execute_test_case(fst_path: Path, test_case: dict) -> TestResults:
         raise FSTTestError("Could not match input with output")
     else:
         return results
-
-
-def parse_lookup_output(raw_output: str) -> Dict[str, List[str]]:
-    """
-    Output from lookup, hfst-lookup and flookup is formatted as one
-    transduction per line, with tab-separated values.
-
-    Each line is formatted like this:
-
-        {input}␉{transduction}
-
-    If the FST is weighted, it will look like this:
-
-        {input}␉{transduction}␉{weight}
-
-    e.g.,
-
-        eats    eat+Verb+3Person+Present
-        eats    eat+Noun+Mass
-
-    e.g., with weights:
-
-        eats    eat+Verb+3Person+Present    0.54301
-        eats    eat+Noun+Mass               7.63670
-
-    If multiple strings are given as input, a blank line will (usually)
-    separate transductions.
-
-    If a transduction fails (cannot be analyzed), the transduction will be
-    `+?` and the weight (if present) will be infinity.
-
-    e.g.,
-
-        fhqwhgads    +?      inf
-
-    """
-
-    results: Dict[str, List[str]] = defaultdict(list)
-
-    for line in raw_output.splitlines():
-        if not line.strip():
-            # Ignore empty lines
-            continue
-
-        input_side, output_side, *_weight = line.lstrip().split("\t")
-        results[input_side].append(output_side)
-
-    return results
 
 
 @contextmanager
