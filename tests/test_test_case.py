@@ -13,8 +13,13 @@ from fsttest import TestCase as _TestCase
         ({"lower": "b", "expect": "a"}, "b", "a", "up"),
     ],
 )
-def test_create_test_case(raw_test_case, fst_input: str, expected: str, direction: str):
-    t = _TestCase.from_description(raw_test_case)
+@pytest.mark.parametrize(
+    "location", [None, "test_verbs.toml"],
+)
+def test_create_test_case(
+    raw_test_case, fst_input: str, expected: str, direction: str, location: str
+):
+    t = _TestCase.from_description(raw_test_case, location=location)
     assert t.input == fst_input
     assert t.expected == expected
     assert t.direction == direction
