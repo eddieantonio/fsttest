@@ -124,8 +124,9 @@ class FailedTestResult:
         return self._actual
 
     def __str__(self) -> str:
+        location = self.location or "<unknown>"
         return (
-            "Failure:\n"
+            f"{location}: Failure:\n"
             f"  Given: {self.input!r}\n"
             f"  Expected: {self.expected!r}\n"
             f"  Instead, got: {self.actual!r}"
