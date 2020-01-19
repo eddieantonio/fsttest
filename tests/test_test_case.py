@@ -8,7 +8,10 @@ from fsttest import TestCase as _TestCase
 
 @pytest.mark.parametrize(
     "raw_test_case,fst_input,expected,direction",
-    [({"upper": "a", "expect": "b"}, "a", "b", "down"),],
+    [
+        ({"upper": "a", "expect": "b"}, "a", "b", "down"),
+        ({"lower": "b", "expect": "a"}, "b", "a", "up"),
+    ],
 )
 def test_create_test_case(raw_test_case, fst_input: str, expected: str, direction: str):
     t = _TestCase.from_description(raw_test_case)
