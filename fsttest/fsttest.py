@@ -6,13 +6,12 @@ import sys
 from contextlib import contextmanager
 from pathlib import Path
 from shutil import which
-from tempfile import TemporaryFile
 from typing import Any, Dict, Generator, List
 
 import toml
 from blessings import Terminal  # type: ignore
 
-from ._fst import FST, create_temporary_input_file, parse_lookup_output
+from ._fst import FST
 from .exceptions import FSTTestError, TestCaseDefinitionError
 
 # ############################### Constants ################################ #
@@ -168,31 +167,22 @@ def execute_test_case(fst_path: Path, test_case: dict) -> TestResults:
     expected = test_case["expect"]
 
     if "upper" in test_case:
-        inverted = True
+        direction = "up"
         fst_input = test_case["upper"]
     elif "lower" in test_case:
-        inverted = False
+        direction = "down"
         fst_input = test_case["lower"]
     else:
         raise TestCaseDefinitionError('Missing "upper" or "lower" in test case')
 
     # Do the lookup
-    if inverted:
-        flookup_flags = ["-i"]
-    else:
-        flookup_flags = []
-
-    with create_temporary_input_file(contents=fst_input) as input_file:
-        output = subprocess.check_output(
-            ["flookup", *flookup_flags, str(fst_path)],
-            encoding="UTF-8",
-            stdin=input_file,
-        )
+    with FST.load_from_path(fst_path) as fst:
+        transductions = fst.apply([fst_input], direction)
 
     results = TestResults()
-
-    transductions = parse_lookup_output(output)
-    assert fst_input in transductions, f"Expected to find {fst_input} in {output}"
+    assert (
+        fst_input in transductions
+    ), f"Expected to find {fst_input} in {transductions}"
 
     actual_transductions = transductions[fst_input]
     if expected in actual_transductions:
