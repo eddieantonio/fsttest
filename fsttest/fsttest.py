@@ -41,6 +41,18 @@ class TestCase:
         self.direction = direction
         self.location = location
 
+    def execute(self, fst: FST) -> "PassedTestResult":
+        transductions = fst.apply([self.input], direction=self.direction)
+        assert (
+            self.input in transductions
+        ), f"Expected to find {self.input} in {transductions}"
+
+        actual_transductions = transductions[self.input]
+        if self.expected in actual_transductions:
+            return PassedTestResult.from_test_case(self)
+        else:
+            raise NotImplementedError
+
     @staticmethod
     def from_description(
         raw_test_case: Dict[str, Any], location: Optional[str] = None
