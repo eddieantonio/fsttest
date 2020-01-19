@@ -18,7 +18,7 @@ from fsttest import TestCase as _TestCase
     ],
 )
 @pytest.mark.parametrize(
-    "location", [None, "test_verbs.toml"],
+    "location", [None, Path("test_verbs.toml")],
 )
 def test_create_test_case(
     raw_test_case, fst_input: str, expected: str, direction: str, location
@@ -32,7 +32,7 @@ def test_create_test_case(
 
 def test_execute_passing_test_case(a_b_transducer_path: Path):
     test_case = _TestCase.from_description(
-        {"upper": "a", "expect": "b"}, location="test_verbs.toml"
+        {"upper": "a", "expect": "b"}, location=Path("test_verbs.toml")
     )
     with FST.load_from_path(a_b_transducer_path) as fst:
         result = test_case.execute(fst)
@@ -41,7 +41,7 @@ def test_execute_passing_test_case(a_b_transducer_path: Path):
 
 def test_execute_failing_test_case(a_b_transducer_path: Path):
     test_case = _TestCase.from_description(
-        {"upper": "a", "expect": "a"}, location="test_verbs.toml"
+        {"upper": "a", "expect": "a"}, location=Path("test_verbs.toml")
     )
     with FST.load_from_path(a_b_transducer_path) as fst:
         result = test_case.execute(fst)
@@ -58,7 +58,7 @@ def test_print_failed_test(capsys):
     """
 
     res = FailedTestResult(
-        location="test_verbs.toml", given="a", expected="a", actual=["b"]
+        location=Path("test_verbs.toml"), given="a", expected="a", actual=["b"]
     )
 
     print(res, file=sys.stderr)

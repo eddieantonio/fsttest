@@ -34,7 +34,7 @@ class TestCase:
     """
 
     def __init__(
-        self, input_: str, expected: str, direction: str, location: Optional[str]
+        self, input_: str, expected: str, direction: str, location: Optional[Path]
     ):
         self.input = input_
         self.expected = expected
@@ -61,7 +61,7 @@ class TestCase:
 
     @staticmethod
     def from_description(
-        raw_test_case: Dict[str, Any], location: Optional[str] = None
+        raw_test_case: Dict[str, Any], location: Optional[Path] = None
     ) -> "TestCase":
         """
         Given a dictionary, parses and returns an executable test case.
@@ -88,11 +88,11 @@ class PassedTestResult:
     Represents one passed test.
     """
 
-    def __init__(self, location: Optional[str]):
+    def __init__(self, location: Optional[Path]):
         self._location = location
 
     @property
-    def location(self) -> Optional[str]:
+    def location(self) -> Optional[Path]:
         return self._location
 
 
@@ -101,14 +101,16 @@ class FailedTestResult:
     Represents a failed test. Contains the reason WHY the test failed.
     """
 
-    def __init__(self, given: str, expected: str, actual: Any, location: Optional[str]):
+    def __init__(
+        self, given: str, expected: str, actual: Any, location: Optional[Path]
+    ):
         self._location = location
         self._input = given
         self._expected = expected
         self._actual = actual
 
     @property
-    def location(self) -> Optional[str]:
+    def location(self) -> Optional[Path]:
         return self._location
 
     @property
