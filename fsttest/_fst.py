@@ -16,8 +16,10 @@ from .exceptions import FSTTestError
 
 
 class FST:
-    def __init__(self, fst_path: Path, foma_args: List[str]):
-        self._path = fst_path
+    def __init__(self, foma_args: List[str]):
+        self._directory = tempdir = TemporaryDirectory()
+        base = Path(tempdir.name)
+        self._path = fst_path = base / "tmp.fomabin"
         status = subprocess.check_call(
             ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
         )
@@ -27,7 +29,7 @@ class FST:
         return self
 
     def __exit__(self, _exec_type, _exec, _stack):
-        ...
+        self._directory.cleanup()
 
     @property
     def path(self) -> Path:
@@ -47,13 +49,10 @@ class FST:
                 ... # use fst_path
         """
 
-        with TemporaryDirectory() as tempdir:
-            # Compile the FST first...
-            base = Path(tempdir)
-            fst_path = base / "tmp.fomabin"
-            foma_args = determine_foma_args(fst_desc)
-            with FST(fst_path, foma_args) as fst:
-                yield fst.path
+        # Compile the FST first...
+        foma_args = determine_foma_args(fst_desc)
+        with FST(foma_args) as fst:
+            yield fst.path
 
 
 def determine_foma_args(raw_fst_description: dict) -> List[str]:
