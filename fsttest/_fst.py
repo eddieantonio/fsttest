@@ -65,6 +65,10 @@ class FST:
 
     @staticmethod
     def load_from_description(fst_desc: Dict[str, Any]) -> "FST":
+        if "fomabin" in fst_desc:
+            # Avoid compiling with Foma.
+            return FST.load_from_path(fst_desc["fomabin"])
+
         return FST(foma_args=determine_foma_args(fst_desc))
 
     @staticmethod
@@ -103,15 +107,8 @@ def determine_foma_args(raw_fst_description: dict) -> List[str]:
         file_to_eval = Path(raw_fst_description["eval"])
         assert file_to_eval.exists()
         args += ["-l", str(file_to_eval)]
-    elif "fomabin" in raw_fst_description:
-        # Load a fomabin
-        path = Path(raw_fst_description["fomabin"])
-        assert path.exists()
-        args += ["-e", f"load stack {path}"]
     else:
         raise FSTTestError(f"Don't know how to read FST from: {raw_fst_description}")
-
-    # TODO: implement other forms of loading the fst
 
     if "regex" in raw_fst_description:
         regex = raw_fst_description["regex"]
