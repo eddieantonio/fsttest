@@ -34,7 +34,7 @@ def test_transduce_lower_to_upper(a_b_transducer_path: Path):
     assert results.n_total == 1
 
 
-def test_failed_test_case(a_b_transducer_path: Path, capsys):
+def test_failed_test_case(a_b_transducer_path: Path):
     """
     Test when a test case fails.
     """
@@ -44,12 +44,6 @@ def test_failed_test_case(a_b_transducer_path: Path, capsys):
     assert results.n_passed == 0
     assert results.n_failed == 1
     assert results.n_total == 1
-
-    captured = capsys.readouterr()
-    assert "Failure" in captured.err
-    assert "Given: 'a'" in captured.err
-    assert "Expected: 'a'" in captured.err
-    assert "got: ['b']" in captured.err
 
 
 def test_invalid_test_case(a_b_transducer_path: Path):

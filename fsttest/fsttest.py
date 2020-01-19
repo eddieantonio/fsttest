@@ -254,6 +254,8 @@ def run_tests(test_dir: Path) -> None:
         results.update_in_place(results_from_test_suite)
 
     if results.has_test_failures:
+        for failure in results.test_failures:
+            print(f"{term.red}{failure}{term.normal}", file=sys.stderr)
         print(f"💥 {term.red}Failed {results.n_failed} test cases{term.normal} 😭😭😭")
         print(f"{term.bold}({results.n_passed}/{results.n_total}) passed{term.normal}")
         sys.exit(EX_HAS_FAILED_TEST_CASES)
@@ -273,14 +275,10 @@ def execute_test_case(fst_path: Path, raw_test_case: Dict[str, Any]) -> TestResu
 
     test_case = TestCase.from_description(raw_test_case, location=None)
 
-    # Do the lookup
     with FST.load_from_path(fst_path) as fst:
         result = test_case.execute(fst)
 
     results = TestResults()
     results.append(result)
-    # TODO: the print should not happen here :/
-    if isinstance(result, FailedTestResult):
-        print(f"{term.red}{result}{term.normal}", file=sys.stderr)
 
     return results
