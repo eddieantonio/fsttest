@@ -22,6 +22,19 @@ def test_path_exists_only_during_command_fomabin(a_b_transducer_path: Path):
     assert not fst.path.exists()
 
 
+def test_load_from_path(a_b_transducer_path: Path):
+    """
+    Test that an FST can be used from an existing path.
+    """
+    with FST.load_from_path(a_b_transducer_path) as fst:
+        assert fst.path.exists()
+        assert fst.path != a_b_transducer_path
+
+        assert fst.apply(["a"], direction="up") == {"a": ["b"]}
+
+    assert not fst.path.exists()
+
+
 @pytest.mark.parametrize(
     "fst_desc",
     [{"regex": "Cleanup"}, {"compose": ["TInsertion", "NiTDeletion", "Cleanup"]},],
