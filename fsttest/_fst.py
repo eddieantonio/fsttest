@@ -69,7 +69,7 @@ class FST:
     def load_from_description(fst_desc: Dict[str, Any]) -> "FST":
         if "fomabin" in fst_desc:
             # Avoid compiling with Foma.
-            return FST.load_from_path(fst_desc["fomabin"])
+            return FST.load_from_path(Path(fst_desc["fomabin"]))
 
         return FST(foma_args=determine_foma_args(fst_desc))
 
