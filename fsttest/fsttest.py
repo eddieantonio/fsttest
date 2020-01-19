@@ -65,6 +65,23 @@ class TestCase:
         return TestCase(fst_input, expected, direction, location)
 
 
+class PassedTestResult:
+    """
+    Represents one passed test.
+    """
+
+    def __init__(self, location: Optional[str]):
+        self._location = location
+
+    @property
+    def location(self) -> Optional[str]:
+        return self._location
+
+    @staticmethod
+    def from_test_case(test_case: TestCase) -> "PassedTestResult":
+        return PassedTestResult(test_case.location)
+
+
 class TestResults:
     """
     Keeps track of TestResults.

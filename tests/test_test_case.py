@@ -3,6 +3,7 @@
 
 import pytest  # type: ignore
 
+from fsttest import PassedTestResult
 from fsttest import TestCase as _TestCase
 
 
