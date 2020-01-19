@@ -20,7 +20,6 @@ def test_run(capsys) -> None:
     """
 
     with pytest.raises(SystemExit):
-
         with cd(FIXTURES_DIR):
             test_dir = Path("tests")
             assert test_dir.is_dir()
@@ -28,7 +27,11 @@ def test_run(capsys) -> None:
 
     stdout, stderr = capsys.readouterr()
     assert "No FST test cases found" not in stdout
+    assert "Failed 1 test" in stdout
+    assert "(1/2) passed" in stdout
     assert "Failure" in stderr
+    assert "Given: 'b'" in stderr
+    assert "Expected: 'a'" in stderr
 
 
 # Copied from: https://stackoverflow.com/a/24469659/6626414
