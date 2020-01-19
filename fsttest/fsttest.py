@@ -4,7 +4,7 @@
 import sys
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Generator, List, Optional, Set, Union
+from typing import Any, Dict, Generator, Iterable, List, Optional, Set, Union
 
 import toml
 from blessings import Terminal  # type: ignore
@@ -137,7 +137,7 @@ class FailedTestResult:
 
 class TestResults:
     """
-    Keeps track of TestResults.
+    Keeps track of test results.
     """
 
     def __init__(self, passed: int = 0, failed: int = 0) -> None:
@@ -159,6 +159,13 @@ class TestResults:
         True if there are any test failures; false, otherwise.
         """
         return self.n_failed > 0
+
+    @property
+    def test_failures(self) -> Iterable[FailedTestResult]:
+        """
+        Yields all failed test results.
+        """
+        return iter(self._test_failures)
 
     @property
     def location_of_test_failures(self) -> Set[Optional[Path]]:
