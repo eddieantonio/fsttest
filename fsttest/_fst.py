@@ -22,6 +22,10 @@ class FST:
             ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
         )
 
+    @property
+    def path(self) -> Path:
+        return self._path
+
     @staticmethod
     def load_from_description(fst_desc: Dict[str, Any]) -> FST:
         raise NotImplementedError
@@ -42,7 +46,7 @@ class FST:
             fst_path = base / "tmp.fomabin"
             foma_args = determine_foma_args(fst_desc)
             fst = FST(fst_path, foma_args)
-            yield fst_path
+            yield fst.path
 
 
 def determine_foma_args(raw_fst_description: dict) -> List[str]:
