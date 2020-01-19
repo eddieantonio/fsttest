@@ -169,18 +169,9 @@ class TestResults:
         Append a test result and count it.
         """
         if isinstance(result, PassedTestResult):
-            self.count_passed_test()
+            self.n_passed += 1
         elif isinstance(result, FailedTestResult):
             self._test_failures.append(result)
-
-    def count_test_failure(self, message: str) -> None:
-        """
-        Call this when a test fails.
-        """
-        self._n_failed += 1
-
-    def count_passed_test(self) -> None:
-        self.n_passed += 1
 
     def update_in_place(self, other: "TestResults") -> "TestResults":
         """
