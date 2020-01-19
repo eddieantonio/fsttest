@@ -16,3 +16,13 @@ install:
 script:
 - mypy fsttest
 - pytest
+
+deploy:
+  provider: pypi
+  before_deploy:
+    - poetry build
+  user: "__token__"
+  password:
+    secure: SNnck3xQ1V4s1q4z9Ec/LAZKD3bHwUKEHo1m7lnrFfGohp40ISmeCFehRSCG0d+SuSh3Uo0n3ljz8RvmH04x8n3yLy23QpoMjvz559SBR6bh/B7W8XuZ/jMAyxPg1gt8mUc7GAN11dTBDBAprlseGQKsHqqwGBe3tQh5J5cLvUtXT8Bw7JgyZbEK29lUL4KWxbBIVeSVgpP0gNiONjtjcQQVJ4BoPO5An+IJ7ceGZwWGh5WCCnl9B6pCYVih3uXzurBuCcuhrAUTCnqyxfRZR2atwpRkyZ9NVsCBnMyuSgSmuUTusNHs97cc3IFl770jgRViWDTix2u2e0iOM55yVN9tOih6ZBazmMT7VzENGbC47rZD9F51yTF4uDGg/NHHpF3sJZyZBijzxXK+41M2s6S08N7XhS6A+YwXXmAKB8L1hdUqIJiY3nd8ClWGBMHKpvDTmjSdj/avvj9hTWWA1HeisxB0qipYG01nYEXyPiIdbSI/bPdANPvjgkGKVrJ6j/9Mg81tmqDXe9wj6FsRqSBSsS7xktTQ/bwSUhctB5V7ZzESQqi3Y+pQly58g8MFJ/zAW3jBUt9b1VfQl5k7wk3ks4MfPiWSe0x5E7GQZnO45MlOWxkQ5M5bx2ty1dXZaVCVfaOTaNcVvj9r3Qn7k/Eq7J0Ht3gtHkrD2LU+7A0=
+  on:
+    tags: true
