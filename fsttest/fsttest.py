@@ -4,7 +4,7 @@
 import sys
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Generator
+from typing import Any, Dict, Generator, Optional
 
 import toml
 from blessings import Terminal  # type: ignore
@@ -33,13 +33,18 @@ class TestCase:
     An executable test case.
     """
 
-    def __init__(self, input_: str, expected: str, direction: str):
+    def __init__(
+        self, input_: str, expected: str, direction: str, location: Optional[str]
+    ):
         self.input = input_
         self.expected = expected
         self.direction = direction
+        self.location = location
 
     @staticmethod
-    def from_description(raw_test_case: Dict[str, Any]) -> "TestCase":
+    def from_description(
+        raw_test_case: Dict[str, Any], location: Optional[str] = None
+    ) -> "TestCase":
         """
         Given a dictionary, parses and returns an executable test case.
         """
@@ -57,7 +62,7 @@ class TestCase:
         else:
             raise TestCaseDefinitionError('Missing "upper" or "lower" in test case')
 
-        return TestCase(fst_input, expected, direction)
+        return TestCase(fst_input, expected, direction, location)
 
 
 class TestResults:
