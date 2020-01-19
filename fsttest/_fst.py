@@ -188,3 +188,13 @@ def create_temporary_input_file(contents: str) -> Generator[IO[str], None, None]
         input_file.write("\n")
         input_file.seek(0)
         yield input_file
+
+
+def ensure_foma_is_executable() -> None:
+    """
+    Raises FSTTestError if foma and flookup executables cannot be found.
+    """
+    if shutil.which("foma") is None:
+        raise FSTTestError("Could not find foma! Is it it installed?")
+    if shutil.which("flookup") is None:
+        raise FSTTestError("Could not find flookup! Is foma installed?")

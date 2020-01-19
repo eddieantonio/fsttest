@@ -77,16 +77,6 @@ class TestResults:
 # ############################### Functions ################################ #
 
 
-def ensure_foma_is_executable() -> None:
-    """
-    Raises FSTTestError if foma and flookup executables cannot be found.
-    """
-    if which("foma") is None:
-        raise FSTTestError("Could not find foma! Is it it installed?")
-    if which("flookup") is None:
-        raise FSTTestError("Could not find flookup! Is foma installed?")
-
-
 @contextmanager
 def load_fst(fst_desc: Dict[str, Any]) -> Generator[Path, None, None]:
     return FST._load_fst(fst_desc)
@@ -134,8 +124,6 @@ def run_tests(test_dir: Path) -> None:
 
     are all tests that will be matched.
     """
-
-    ensure_foma_is_executable()
 
     results = TestResults()
 
