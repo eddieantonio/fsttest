@@ -55,3 +55,18 @@ def test_update_test_results_in_place() -> None:
     assert results.n_total == 3
     assert results.n_failed == 2
     assert results.location_of_test_failures == {None, Path("test_verbs.toml")}
+
+
+def test_can_iterate_over_test_cases() -> None:
+    results = _TestResults()
+    results.append(FailedTestResult(given="a", expected="a", actual=["b"]))
+    results.append(PassedTestResult(location=Path("test_awesome.toml")))
+    results.append(
+        FailedTestResult(
+            given="b", expected="a", actual=["+?"], location=Path("test_verbs.toml")
+        )
+    )
+
+    test_failures = list(results.test_failures)
+    assert results.n_total == 3
+    assert len(test_failures) == results.n_failed == 2
