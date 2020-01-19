@@ -5,7 +5,7 @@ from pathlib import Path
 
 import pytest  # type: ignore
 
-from fsttest import FST, FailedTestCase, PassedTestResult
+from fsttest import FST, FailedTestResult, PassedTestResult
 from fsttest import TestCase as _TestCase
 
 
@@ -57,5 +57,8 @@ def test_execute_failing_test_case(a_b_transducer_path: Path):
     )
     with FST.load_from_path(a_b_transducer_path) as fst:
         result = test_case.execute(fst)
-    assert isinstance(result, FailedTestCase)
+    assert isinstance(result, FailedTestResult)
     assert result.location == test_case.location
+    assert result.input == "a"
+    assert result.expected == "a"
+    assert result.actual == ["b"]

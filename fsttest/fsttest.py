@@ -4,7 +4,7 @@
 import sys
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Generator, Optional
+from typing import Any, Dict, Generator, Optional, Union
 
 import toml
 from blessings import Terminal  # type: ignore
@@ -41,7 +41,7 @@ class TestCase:
         self.direction = direction
         self.location = location
 
-    def execute(self, fst: FST) -> "PassedTestResult":
+    def execute(self, fst: FST) -> Union["PassedTestResult", "FailedTestResult"]:
         transductions = fst.apply([self.input], direction=self.direction)
         assert (
             self.input in transductions
@@ -51,7 +51,12 @@ class TestCase:
         if self.expected in actual_transductions:
             return PassedTestResult.from_test_case(self)
         else:
-            raise NotImplementedError
+            return FailedTestResult(
+                given=self.input,
+                expected=self.expected,
+                actual=actual_transductions,
+                location=self.location,
+            )
 
     @staticmethod
     def from_description(
@@ -92,6 +97,34 @@ class PassedTestResult:
     @staticmethod
     def from_test_case(test_case: TestCase) -> "PassedTestResult":
         return PassedTestResult(test_case.location)
+
+
+class FailedTestResult:
+    """
+    Represents a failed test. Contains the reason WHY the test failed.
+    """
+
+    def __init__(self, given: str, expected: str, actual: Any, location: Optional[str]):
+        self._location = location
+        self._input = given
+        self._expected = expected
+        self._actual = actual
+
+    @property
+    def location(self) -> Optional[str]:
+        return self._location
+
+    @property
+    def input(self) -> str:
+        return self._input
+
+    @property
+    def expected(self) -> str:
+        return self._expected
+
+    @property
+    def actual(self) -> str:
+        return self._actual
 
 
 class TestResults:

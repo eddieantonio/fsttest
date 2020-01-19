@@ -9,6 +9,7 @@ from .__version__ import VERSION as __version__
 from ._fst import FST
 from .exceptions import FSTTestError, TestCaseDefinitionError
 from .fsttest import (
+    FailedTestResult,
     PassedTestResult,
     TestCase,
     TestResults,
@@ -20,6 +21,7 @@ from .fsttest import (
 __all__ = [
     "FST",
     "FSTTestError",
+    "FailedTestResult",
     "PassedTestResult",
     "TestCaseDefinitionError",
     "TestResults",
