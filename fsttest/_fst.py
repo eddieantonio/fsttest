@@ -7,6 +7,7 @@ Define the FST class.
 
 from __future__ import annotations
 
+import shutil
 import subprocess
 from collections import defaultdict
 from contextlib import contextmanager
@@ -18,14 +19,19 @@ from .exceptions import FSTTestError
 
 
 class FST:
-    def __init__(self, foma_args: List[str]):
+    def __init__(self, foma_args: List[str] = None, existing_path: Path = None):
         self._directory = tempdir = TemporaryDirectory()
         base = Path(tempdir.name)
         self._path = fst_path = base / "tmp.fomabin"
-        # Compile the FST:
-        status = subprocess.check_call(
-            ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
-        )
+
+        if foma_args:
+            subprocess.check_call(
+                ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
+            )
+        elif existing_path:
+            shutil.copyfile(existing_path, fst_path)
+        else:
+            raise ValueError("Must provide some existing FST...")
 
     def __enter__(self) -> FST:
         # Note: Intiailization already done in __init__
@@ -61,8 +67,7 @@ class FST:
 
     @staticmethod
     def load_from_description(fst_desc: Dict[str, Any]) -> FST:
-        foma_args = determine_foma_args(fst_desc)
-        return FST(foma_args)
+        return FST(foma_args=determine_foma_args(fst_desc))
 
     @staticmethod
     def _load_fst(fst_desc: Dict[str, Any]) -> Generator[Path, None, None]:
@@ -75,6 +80,11 @@ class FST:
         """
         with FST.load_from_description(fst_desc) as fst:
             yield fst.path
+
+    @staticmethod
+    def load_from_path(fst_path: Path) -> FST:
+        assert fst_path.exists()
+        return FST(existing_path=fst_path)
 
 
 def determine_foma_args(raw_fst_description: dict) -> List[str]:
