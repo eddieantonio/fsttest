@@ -5,8 +5,6 @@
 Define the FST class.
 """
 
-from __future__ import annotations
-
 import shutil
 import subprocess
 from collections import defaultdict
@@ -33,7 +31,7 @@ class FST:
         else:
             raise ValueError("Must provide some existing FST...")
 
-    def __enter__(self) -> FST:
+    def __enter__(self) -> "FST":
         # Note: Intiailization already done in __init__
         return self
 
@@ -66,7 +64,7 @@ class FST:
         return parse_lookup_output(output)
 
     @staticmethod
-    def load_from_description(fst_desc: Dict[str, Any]) -> FST:
+    def load_from_description(fst_desc: Dict[str, Any]) -> "FST":
         return FST(foma_args=determine_foma_args(fst_desc))
 
     @staticmethod
@@ -82,7 +80,7 @@ class FST:
             yield fst.path
 
     @staticmethod
-    def load_from_path(fst_path: Path) -> FST:
+    def load_from_path(fst_path: Path) -> "FST":
         assert fst_path.exists()
         return FST(existing_path=fst_path)
 
