@@ -4,7 +4,7 @@
 import sys
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Generator, Optional, Union
+from typing import Any, Dict, Generator, List, Optional, Union
 
 import toml
 from blessings import Terminal  # type: ignore
@@ -142,11 +142,16 @@ class TestResults:
 
     def __init__(self, passed: int = 0, failed: int = 0) -> None:
         self.n_passed = passed
-        self.n_failed = failed
+        self._n_failed = failed
+        self._test_failures: List[FailedTestResult] = []
 
     @property
     def n_total(self) -> int:
         return self.n_passed + self.n_failed
+
+    @property
+    def n_failed(self) -> int:
+        return self._n_failed + len(self._test_failures)
 
     @property
     def has_test_failures(self) -> bool:
@@ -155,11 +160,17 @@ class TestResults:
         """
         return self.n_failed > 0
 
+    def append(self, result: FailedTestResult) -> None:
+        """
+        Append a test result and count it.
+        """
+        self._test_failures.append(result)
+
     def count_test_failure(self, message: str) -> None:
         """
         Call this when a test fails.
         """
-        self.n_failed += 1
+        self._n_failed += 1
         print(f"{term.red}{message}{term.normal}", file=sys.stderr)
 
     def count_passed_test(self) -> None:
@@ -173,7 +184,7 @@ class TestResults:
         previous_total = self.n_total
 
         self.n_passed += other.n_passed
-        self.n_failed += other.n_failed
+        self._n_failed += other.n_failed
 
         assert self.n_total == previous_total + other.n_total
         return self
