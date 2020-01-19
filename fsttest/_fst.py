@@ -16,8 +16,11 @@ from .exceptions import FSTTestError
 
 
 class FST:
-    def __init__(self, path: Path):
-        self.path = path
+    def __init__(self, fst_path: Path, foma_args: List[str]):
+        self._path = fst_path
+        status = subprocess.check_call(
+            ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
+        )
 
     @staticmethod
     def load_from_description(fst_desc: Dict[str, Any]) -> FST:
@@ -32,15 +35,13 @@ class FST:
             with load_fst({"eval": "./path/to/script.xfscript"}) as fst_path:
                 ... # use fst_path
         """
-        foma_args = determine_foma_args(fst_desc)
 
         with TemporaryDirectory() as tempdir:
             # Compile the FST first...
             base = Path(tempdir)
             fst_path = base / "tmp.fomabin"
-            status = subprocess.check_call(
-                ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
-            )
+            foma_args = determine_foma_args(fst_desc)
+            fst = FST(fst_path, foma_args)
             yield fst_path
 
 
