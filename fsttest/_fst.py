@@ -37,7 +37,8 @@ class FST:
 
     @staticmethod
     def load_from_description(fst_desc: Dict[str, Any]) -> FST:
-        raise NotImplementedError
+        foma_args = determine_foma_args(fst_desc)
+        return FST(foma_args)
 
     @staticmethod
     def _load_fst(fst_desc: Dict[str, Any]) -> Generator[Path, None, None]:
