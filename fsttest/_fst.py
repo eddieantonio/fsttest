@@ -20,12 +20,13 @@ class FST:
         self._directory = tempdir = TemporaryDirectory()
         base = Path(tempdir.name)
         self._path = fst_path = base / "tmp.fomabin"
+        # Compile the FST:
         status = subprocess.check_call(
             ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
         )
 
     def __enter__(self) -> FST:
-        # Intiailization already done in __init__
+        # Note: Intiailization already done in __init__
         return self
 
     def __exit__(self, _exec_type, _exec, _stack):
@@ -49,10 +50,7 @@ class FST:
             with load_fst({"eval": "./path/to/script.xfscript"}) as fst_path:
                 ... # use fst_path
         """
-
-        # Compile the FST first...
-        foma_args = determine_foma_args(fst_desc)
-        with FST(foma_args) as fst:
+        with FST.load_from_description(fst_desc) as fst:
             yield fst.path
 
 
