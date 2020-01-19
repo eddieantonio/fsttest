@@ -250,46 +250,23 @@ def run_tests(test_dir: Path) -> None:
         )
 
 
-def execute_test_case(fst_path: Path, test_case: dict) -> TestResults:
+def execute_test_case(fst_path: Path, raw_test_case: Dict[str, Any]) -> TestResults:
     """
     Execute a test case from its raw dictionary.
     """
 
-    if "expect" not in test_case:
-        raise TestCaseDefinitionError('Missing "expect" in test case')
-    expected = test_case["expect"]
-
-    if "upper" in test_case:
-        direction = "down"
-        fst_input = test_case["upper"]
-    elif "lower" in test_case:
-        direction = "up"
-        fst_input = test_case["lower"]
-    else:
-        raise TestCaseDefinitionError('Missing "upper" or "lower" in test case')
+    test_case = TestCase.from_description(raw_test_case, location=None)
 
     # Do the lookup
     with FST.load_from_path(fst_path) as fst:
-        transductions = fst.apply([fst_input], direction)
+        result = test_case.execute(fst)
 
     results = TestResults()
-    assert (
-        fst_input in transductions
-    ), f"Expected to find {fst_input} in {transductions}"
-
-    actual_transductions = transductions[fst_input]
-    if expected in actual_transductions:
+    if isinstance(result, PassedTestResult):
         results.count_passed_test()
+    elif isinstance(result, FailedTestResult):
+        results.count_test_failure(str(result))
     else:
-        # Test case failure
-        results.count_test_failure(
-            f"Failure:\n"
-            f"  Given: {fst_input!r}\n"
-            f"  Expected: {expected!r}\n"
-            f"  Instead, got: {actual_transductions!r}"
-        )
-
-    if results.n_total == 0:
         raise FSTTestError("Could not match input with output")
-    else:
-        return results
+
+    return results
