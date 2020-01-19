@@ -28,6 +28,37 @@ term = Terminal()
 # ################################ Classes ################################# #
 
 
+class TestCase:
+    """
+    An executable test case.
+    """
+
+    def __init__(self, input_: str, expected: str):
+        self.input = input_
+        self.expected = expected
+
+    @staticmethod
+    def from_description(raw_test_case: Dict[str, Any]) -> "TestCase":
+        """
+        Given a dictionary, parses and returns an executable test case.
+        """
+        # Parse a few things
+        if "expect" not in raw_test_case:
+            raise TestCaseDefinitionError('Missing "expect" in test case')
+        expected = raw_test_case["expect"]
+
+        if "upper" in raw_test_case:
+            direction = "up"
+            fst_input = raw_test_case["upper"]
+        elif "lower" in raw_test_case:
+            direction = "down"
+            fst_input = raw_test_case["lower"]
+        else:
+            raise TestCaseDefinitionError('Missing "upper" or "lower" in test case')
+
+        return TestCase(fst_input, expected)
+
+
 class TestResults:
     """
     Keeps track of TestResults.
