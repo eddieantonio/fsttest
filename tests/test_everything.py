@@ -107,28 +107,3 @@ def test_load_fst_from_xfst_with_compose(test_case, rewrite_rules_path: Path):
         results = execute_test_case(fst_path, test_case)
     assert results.n_passed == 1
     assert results.n_total == 1
-
-
-@pytest.fixture
-def a_b_transducer_path() -> Path:
-    """
-    Transduces a (upper) to b (lower).
-    """
-    path = Path(__file__).parent / "fixtures" / "ab.fomabin"
-    assert path.exists()
-    return path
-
-
-@pytest.fixture
-def rewrite_rules_path() -> Path:
-    """
-    Returns the path to an XFST script with the following defined regexes:
-
-     - Vowel
-     - TInsertion
-     - NiTDeletion
-     - Cleanup
-    """
-    path = Path(__file__).parent / "fixtures" / "rewrite_rules.xfscript"
-    assert path.exists()
-    return path
