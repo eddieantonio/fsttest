@@ -191,7 +191,8 @@ class TestResults:
         previous_total = self.n_total
 
         self.n_passed += other.n_passed
-        self._n_failed += other.n_failed
+        self._n_failed += other._n_failed
+        self._test_failures.extend(other._test_failures)
 
         assert self.n_total == previous_total + other.n_total
         return self

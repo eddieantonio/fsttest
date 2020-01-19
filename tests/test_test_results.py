@@ -54,4 +54,4 @@ def test_update_test_results_in_place() -> None:
     results.update_in_place(other_results)
     assert results.n_total == 3
     assert results.n_failed == 2
-    assert results.location_of_test_failures == {Path("test_verbs.toml")}
+    assert results.location_of_test_failures == {None, Path("test_verbs.toml")}
