@@ -160,11 +160,14 @@ class TestResults:
         """
         return self.n_failed > 0
 
-    def append(self, result: FailedTestResult) -> None:
+    def append(self, result: Union[PassedTestResult, FailedTestResult]) -> None:
         """
         Append a test result and count it.
         """
-        self._test_failures.append(result)
+        if isinstance(result, PassedTestResult):
+            self.count_passed_test()
+        elif isinstance(result, FailedTestResult):
+            self._test_failures.append(result)
 
     def count_test_failure(self, message: str) -> None:
         """
