@@ -7,13 +7,13 @@ from collections import defaultdict
 from contextlib import contextmanager
 from pathlib import Path
 from shutil import which
-from tempfile import TemporaryDirectory, TemporaryFile
-from typing import Dict, Generator, List
+from tempfile import TemporaryFile
+from typing import Any, Dict, Generator, List
 
 import toml
 from blessings import Terminal  # type: ignore
 
-from ._fst import determine_foma_args
+from ._fst import FST, determine_foma_args
 from .exceptions import FSTTestError, TestCaseDefinitionError
 
 # ############################### Constants ################################ #
@@ -90,24 +90,8 @@ def ensure_foma_is_executable() -> None:
 
 
 @contextmanager
-def load_fst(fst_desc: dict) -> Generator[Path, None, None]:
-    """
-    Loads an FST and yields its path. When finished using the FST, the path
-    may no longer be used. Intended to be used in a with-statement:
-
-        with load_fst({"eval": "./path/to/script.xfscript"}) as fst_path:
-            ... # use fst_path
-    """
-    foma_args = determine_foma_args(fst_desc)
-
-    with TemporaryDirectory() as tempdir:
-        # Compile the FST first...
-        base = Path(tempdir)
-        fst_path = base / "tmp.fomabin"
-        status = subprocess.check_call(
-            ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
-        )
-        yield fst_path
+def load_fst(fst_desc: Dict[str, Any]) -> Generator[Path, None, None]:
+    return FST._load_fst(fst_desc)
 
 
 def run_test_suite_from_filename(test_file: Path) -> TestResults:

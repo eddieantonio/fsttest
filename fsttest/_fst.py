@@ -7,8 +7,10 @@ Define the FST class.
 
 from __future__ import annotations
 
+import subprocess
 from pathlib import Path
-from typing import Any, Dict, List
+from tempfile import TemporaryDirectory
+from typing import Any, Dict, Generator, List
 
 from .exceptions import FSTTestError
 
@@ -17,9 +19,29 @@ class FST:
     def __init__(self, path: Path):
         self.path = path
 
-    # @staticmethod
-    # def load_from_description(fst_desc: Dict[str, Any]) -> FST:
-    #     return FST(...)
+    @staticmethod
+    def load_from_description(fst_desc: Dict[str, Any]) -> FST:
+        raise NotImplementedError
+
+    @staticmethod
+    def _load_fst(fst_desc: Dict[str, Any]) -> Generator[Path, None, None]:
+        """
+        Loads an FST and yields its path. When finished using the FST, the path
+        may no longer be used. Intended to be used in a with-statement:
+
+            with load_fst({"eval": "./path/to/script.xfscript"}) as fst_path:
+                ... # use fst_path
+        """
+        foma_args = determine_foma_args(fst_desc)
+
+        with TemporaryDirectory() as tempdir:
+            # Compile the FST first...
+            base = Path(tempdir)
+            fst_path = base / "tmp.fomabin"
+            status = subprocess.check_call(
+                ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
+            )
+            yield fst_path
 
 
 def determine_foma_args(raw_fst_description: dict) -> List[str]:
