@@ -33,4 +33,4 @@ def test_can_count_a_test_failure() -> None:
     assert results.n_passed == 0
     assert results.n_total == 1
     assert results.has_test_failures
-    assert results.location_of_test_failures == {"test_verbs.toml"}
+    assert results.location_of_test_failures == {Path("test_verbs.toml")}

@@ -4,7 +4,7 @@
 import sys
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Generator, List, Optional, Union
+from typing import Any, Dict, Generator, List, Optional, Set, Union
 
 import toml
 from blessings import Terminal  # type: ignore
@@ -159,6 +159,10 @@ class TestResults:
         True if there are any test failures; false, otherwise.
         """
         return self.n_failed > 0
+
+    @property
+    def location_of_test_failures(self) -> Set[Optional[Path]]:
+        return {res.location for res in self._test_failures}
 
     def append(self, result: Union[PassedTestResult, FailedTestResult]) -> None:
         """
