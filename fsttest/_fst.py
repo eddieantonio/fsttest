@@ -9,9 +9,10 @@ from __future__ import annotations
 
 import subprocess
 from collections import defaultdict
+from contextlib import contextmanager
 from pathlib import Path
-from tempfile import TemporaryDirectory
-from typing import Any, Dict, Generator, List
+from tempfile import TemporaryDirectory, TemporaryFile
+from typing import IO, Any, Dict, Generator, List
 
 from .exceptions import FSTTestError
 
@@ -36,6 +37,9 @@ class FST:
     @property
     def path(self) -> Path:
         return self._path
+
+    def apply(self, inputs: List[str], direction: str = "down") -> Dict[str, List[str]]:
+        raise NotImplementedError
 
     @staticmethod
     def load_from_description(fst_desc: Dict[str, Any]) -> FST:
@@ -144,3 +148,15 @@ def parse_lookup_output(raw_output: str) -> Dict[str, List[str]]:
         results[input_side].append(output_side)
 
     return results
+
+
+@contextmanager
+def create_temporary_input_file(contents: str) -> Generator[IO[str], None, None]:
+    """
+    Write text to a file, and use it from the beginning.
+    """
+    with TemporaryFile(mode="w+", encoding="UTF-8") as input_file:
+        input_file.write(contents)
+        input_file.write("\n")
+        input_file.seek(0)
+        yield input_file

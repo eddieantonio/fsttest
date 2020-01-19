@@ -12,7 +12,7 @@ from typing import Any, Dict, Generator, List
 import toml
 from blessings import Terminal  # type: ignore
 
-from ._fst import FST, parse_lookup_output
+from ._fst import FST, create_temporary_input_file, parse_lookup_output
 from .exceptions import FSTTestError, TestCaseDefinitionError
 
 # ############################### Constants ################################ #
@@ -210,12 +210,3 @@ def execute_test_case(fst_path: Path, test_case: dict) -> TestResults:
         raise FSTTestError("Could not match input with output")
     else:
         return results
-
-
-@contextmanager
-def create_temporary_input_file(contents: str):
-    with TemporaryFile(mode="w+", encoding="UTF-8") as input_file:
-        input_file.write(contents)
-        input_file.write("\n")
-        input_file.seek(0)
-        yield input_file
