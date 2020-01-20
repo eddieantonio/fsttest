@@ -14,7 +14,7 @@ FIXTURES_DIR = Path(__file__).parent / "fixtures"
 assert FIXTURES_DIR.is_dir()
 
 
-def test_run(capsys) -> None:
+def test_run_with_failures(capsys) -> None:
     """
     Tests running this within the fixtures dir.
     """
@@ -32,6 +32,21 @@ def test_run(capsys) -> None:
     assert "test_a_b.toml: Failure" in stderr
     assert "Given: 'b'" in stderr
     assert "Expected: 'a'" in stderr
+
+
+def test_run_empty(capsys) -> None:
+    """
+    Tests running this within the fixtures dir.
+    """
+
+    with pytest.raises(SystemExit):
+        with cd(FIXTURES_DIR):
+            test_dir = Path("empty_test_suite")
+            assert test_dir.is_dir()
+            run_tests(test_dir)
+
+    stdout, stderr = capsys.readouterr()
+    assert "No FST test cases found" in stdout
 
 
 # Copied from: https://stackoverflow.com/a/24469659/6626414
