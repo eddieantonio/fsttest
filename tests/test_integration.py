@@ -29,7 +29,7 @@ def test_run(capsys) -> None:
     assert "No FST test cases found" not in stdout
     assert "Failed 1 test" in stdout
     assert "(1/2) passed" in stdout
-    assert "Failure" in stderr
+    assert "test_a_b.toml: Failure" in stderr
     assert "Given: 'b'" in stderr
     assert "Expected: 'a'" in stderr
 
