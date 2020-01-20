@@ -223,7 +223,9 @@ def run_test_suite_from_filename(test_file: Path) -> TestResults:
         #     ],
         # }
         for test_case in raw_test_case["tests"]:
-            results_from_test_case = execute_test_case(fst_path, test_case)
+            results_from_test_case = execute_test_case(
+                fst_path, test_case, location=test_file
+            )
             results.update_in_place(results_from_test_case)
 
     return results
@@ -268,12 +270,14 @@ def run_tests(test_dir: Path) -> None:
         )
 
 
-def execute_test_case(fst_path: Path, raw_test_case: Dict[str, Any]) -> TestResults:
+def execute_test_case(
+    fst_path: Path, raw_test_case: Dict[str, Any], location: Optional[Path] = None
+) -> TestResults:
     """
     Execute a test case from its raw dictionary.
     """
 
-    test_case = TestCase.from_description(raw_test_case, location=None)
+    test_case = TestCase.from_description(raw_test_case, location=location)
 
     with FST.load_from_path(fst_path) as fst:
         result = test_case.execute(fst)
