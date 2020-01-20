@@ -2,9 +2,8 @@
 # -*- coding: UTF-8 -*-
 
 import sys
-from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Generator, Optional, Union
+from typing import Any, Dict, Optional, Union
 
 import toml
 from blessings import Terminal  # type: ignore
@@ -85,11 +84,6 @@ class TestCase:
 
 
 # ############################### Functions ################################ #
-
-
-@contextmanager
-def load_fst(fst_desc: Dict[str, Any]) -> Generator[Path, None, None]:
-    return FST._load_fst(fst_desc)
 
 
 def run_test_suite_from_filename(test_file: Path) -> TestResults:

@@ -14,7 +14,6 @@ from .fsttest import (
     TestCase,
     TestResults,
     execute_test_case,
-    load_fst,
     run_tests,
 )
 
