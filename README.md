@@ -1,6 +1,9 @@
 fsttest
 =======
 
+[![Build Status](https://travis-ci.org/eddieantonio/fsttest.svg?branch=development)](https://travis-ci.org/eddieantonio/fsttest)
+[![codecov](https://codecov.io/gh/eddieantonio/fsttest/branch/development/graph/badge.svg)](https://codecov.io/gh/eddieantonio/fsttest)
+
 Test your Foma FSTs!
 
 Install
