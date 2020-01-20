@@ -19,7 +19,7 @@ Write `test_*.toml` scripts in a folder called `tests/`, then run:
 Documentation
 -------------
 
- * [How to specify the FST under test](./docs/fst-under-test')
+ * [How to specify the FST under test](./docs/fst-under-test.md)
 
 Tutorial
 --------
@@ -55,7 +55,7 @@ Then run the test!
 
     $ fsttest
     1/1 tests passed! ✨ 🍰 ✨
-    
+
 
 ### Line-by-line
 
