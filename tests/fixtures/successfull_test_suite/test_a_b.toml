@@ -1,0 +1,12 @@
+[fst]
+fomabin = "ab.fomabin"
+
+[[tests]]
+# This one should pass
+upper = "a"
+expect = "b"
+
+[[tests]]
+# This one should also pass
+lower = "b"
+expect = "a"

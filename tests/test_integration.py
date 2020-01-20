@@ -34,7 +34,7 @@ def test_run_with_failures(capsys) -> None:
     assert "Expected: 'a'" in stderr
 
 
-def test_run_empty(capsys) -> None:
+def test_run_empty_test_suite(capsys) -> None:
     """
     Tests running this within the fixtures dir.
     """
@@ -47,6 +47,23 @@ def test_run_empty(capsys) -> None:
 
     stdout, stderr = capsys.readouterr()
     assert "No FST test cases found" in stdout
+
+
+def test_run_successfull_test_suiote(capsys) -> None:
+    """
+    Tests running this within the fixtures dir.
+    """
+
+    with cd(FIXTURES_DIR):
+        test_dir = Path("successfull_test_suite")
+        assert test_dir.is_dir()
+        run_tests(test_dir)
+
+    stdout, stderr = capsys.readouterr()
+
+    assert "No FST test cases found" not in stdout, "Emtpy test suite?"
+    assert "Failed" not in stdout, "Failed test suite?"
+    assert "2/2 tests passed!" in stdout
 
 
 # Copied from: https://stackoverflow.com/a/24469659/6626414
