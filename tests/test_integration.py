@@ -4,6 +4,7 @@
 
 import contextlib
 import os
+import re
 from pathlib import Path
 
 import pytest  # type: ignore
@@ -49,7 +50,7 @@ def test_run_empty_test_suite(capsys) -> None:
     assert "No FST test cases found" in stdout
 
 
-def test_run_successfull_test_suiote(capsys) -> None:
+def test_run_successfull_test_suiote(capfd) -> None:
     """
     Tests running this within the fixtures dir.
     """
@@ -59,11 +60,11 @@ def test_run_successfull_test_suiote(capsys) -> None:
         assert test_dir.is_dir()
         run_tests(test_dir)
 
-    stdout, stderr = capsys.readouterr()
+    stdout, stderr = capfd.readouterr()
 
     assert "No FST test cases found" not in stdout, "Emtpy test suite?"
     assert "Failed" not in stdout, "Failed test suite?"
-    assert "2/2 tests passed!" in stdout
+    assert re.search(r"(\d+)/\1 tests passed!", stdout)
 
 
 # Copied from: https://stackoverflow.com/a/24469659/6626414
