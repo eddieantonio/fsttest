@@ -15,7 +15,9 @@ install:
 - poetry install -vv
 script:
 - mypy fsttest
-- pytest
+- pytest --cov=fsttest
+after_success:
+- codecov
 
 env:
   global:
