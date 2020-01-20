@@ -29,8 +29,9 @@ class FST:
         ensure_foma_is_executable()
 
         if foma_args:
-            subprocess.check_call(
-                ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"]
+            self._diagnostics = subprocess.check_output(
+                ["foma", *foma_args, "-e", f"save stack {fst_path!s}", "-s"],
+                encoding="UTF-8",
             )
         elif existing_path:
             shutil.copyfile(existing_path, fst_path)
