@@ -45,6 +45,11 @@ def test_run_with_failures(capfd) -> None:
     assert "Given: 'b'" in stderr
     assert "Expected: 'a'" in stderr
 
+    # Find Foma defines in stderr
+    assert re.search(
+        r"defined \w+: \d+ bytes?", stderr
+    ), "Should find Foma output in failed test run"
+
 
 def test_run_empty_test_suite(capsys) -> None:
     """

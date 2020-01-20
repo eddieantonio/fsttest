@@ -11,7 +11,7 @@ from collections import defaultdict
 from contextlib import contextmanager
 from pathlib import Path
 from tempfile import TemporaryDirectory, TemporaryFile
-from typing import IO, Any, Dict, Generator, List
+from typing import IO, Any, Dict, Generator, List, Optional
 
 from .exceptions import FSTTestError
 
@@ -48,6 +48,13 @@ class FST:
     @property
     def path(self) -> Path:
         return self._path
+
+    @property
+    def diagnostics(self) -> Optional[str]:
+        if hasattr(self, "_diagnostics"):
+            return self._diagnostics
+        else:
+            return None
 
     def apply(self, inputs: List[str], direction: str = "up") -> Dict[str, List[str]]:
         if direction == "up":
