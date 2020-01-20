@@ -11,7 +11,7 @@ import pytest  # type: ignore
 
 # Pytest will try to run tests here.
 from fsttest import TestCaseDefinitionError as _TestCaseDefinitionError
-from fsttest import execute_test_case, load_fst
+from fsttest import execute_test_case
 
 
 def test_transduce_upper_to_lower(a_b_transducer_path: Path):
