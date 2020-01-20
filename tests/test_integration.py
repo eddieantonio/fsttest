@@ -15,7 +15,7 @@ FIXTURES_DIR = Path(__file__).parent / "fixtures"
 assert FIXTURES_DIR.is_dir()
 
 
-def test_run_with_failures(capsys) -> None:
+def test_run_with_failures(capfd) -> None:
     """
     Tests running this within the fixtures dir.
     """
@@ -26,14 +26,22 @@ def test_run_with_failures(capsys) -> None:
             assert test_dir.is_dir()
             run_tests(test_dir)
 
-    stdout, stderr = capsys.readouterr()
+    stdout, stderr = capfd.readouterr()
+
     assert "No FST test cases found" not in stdout
+
+    # It should tell us that things have failed.
     m = re.search(r"Failed \d+ tests?", stdout)
     assert m, f"Could not find failure message in stdout: {stdout}"
+
+    # Find out how many passed.
     m = re.search(r"[(](\d+)/(\d+)[)] passed", stdout)
     assert m, f"Could not find passed status in stdout: {stdout}"
     assert int(m[1]) < int(m[2]), "Expected to find fewer passed tests."
+
+    # Find formatted error messages.
     assert "test_a_b.toml: Failure" in stderr
+    assert "test_rewrite_rules.toml: Failure" in stderr
     assert "Given: 'b'" in stderr
     assert "Expected: 'a'" in stderr
 
