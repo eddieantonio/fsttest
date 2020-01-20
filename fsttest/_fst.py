@@ -74,18 +74,6 @@ class FST:
         return FST(foma_args=determine_foma_args(fst_desc))
 
     @staticmethod
-    def _load_fst(fst_desc: Dict[str, Any]) -> Generator[Path, None, None]:
-        """
-        Loads an FST and yields its path. When finished using the FST, the path
-        may no longer be used. Intended to be used in a with-statement:
-
-            with load_fst({"eval": "./path/to/script.xfscript"}) as fst_path:
-                ... # use fst_path
-        """
-        with FST.load_from_description(fst_desc) as fst:
-            yield fst.path
-
-    @staticmethod
     def load_from_path(fst_path: Path) -> "FST":
         assert fst_path.exists()
         return FST(existing_path=fst_path)
