@@ -19,7 +19,7 @@ Write `test_*.toml` scripts in a folder called `tests/`, then run:
 Documentation
 -------------
 
- * [How to specify the FST under test](./docs/fst-under-test.md)
+ * [How to specify the FST under test](https://github.com/eddieantonio/fsttest/blob/development/docs/fst-under-test.md#how-to-specify-the-fst-under-test)
 
 Tutorial
 --------
