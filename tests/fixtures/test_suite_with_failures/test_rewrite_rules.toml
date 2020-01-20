@@ -1,0 +1,13 @@
+[fst]
+eval = "rewrite_rules.xfscript"
+compose = ["TInsertion", "Cleanup"]
+
+[[tests]]
+# This one will pass
+lower = "ki<ayaa<n"
+expect = "kitayaan"
+
+[[tests]]
+# This one will fail
+upper = "ni<ayaa<n"
+expect = "dayaan"

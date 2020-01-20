@@ -28,8 +28,11 @@ def test_run_with_failures(capsys) -> None:
 
     stdout, stderr = capsys.readouterr()
     assert "No FST test cases found" not in stdout
-    assert "Failed 1 test" in stdout
-    assert "(1/2) passed" in stdout
+    m = re.search(r"Failed \d+ tests?", stdout)
+    assert m, f"Could not find failure message in stdout: {stdout}"
+    m = re.search(r"[(](\d+)/(\d+)[)] passed", stdout)
+    assert m, f"Could not find passed status in stdout: {stdout}"
+    assert int(m[1]) < int(m[2]), "Expected to find fewer passed tests."
     assert "test_a_b.toml: Failure" in stderr
     assert "Given: 'b'" in stderr
     assert "Expected: 'a'" in stderr
@@ -63,7 +66,7 @@ def test_run_successfull_test_suiote(capfd) -> None:
     stdout, stderr = capfd.readouterr()
 
     assert (
-        re.search("defined \w+: \d+ bytes?", stdout) is None
+        re.search(r"defined \w+: \d+ bytes?", stdout) is None
     ), "Should not find Foma output in successfull test run"
 
     assert "No FST test cases found" not in stdout, "Emtpy test suite?"
