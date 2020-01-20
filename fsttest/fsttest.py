@@ -103,7 +103,7 @@ def run_test_suite_from_filename(test_file: Path) -> TestResults:
     results = TestResults()
 
     fst_desc = raw_test_case["fst"]
-    with load_fst(fst_desc) as fst_path:
+    with FST.load_from_description(fst_desc) as fst:
         # Raw test cases look like this:
         # {
         #     "tests": [
@@ -113,7 +113,7 @@ def run_test_suite_from_filename(test_file: Path) -> TestResults:
         # }
         for test_case in raw_test_case["tests"]:
             results_from_test_case = execute_test_case(
-                fst_path, test_case, location=test_file
+                fst.path, test_case, location=test_file
             )
             results.update_in_place(results_from_test_case)
 
