@@ -62,6 +62,10 @@ def test_run_successfull_test_suiote(capfd) -> None:
 
     stdout, stderr = capfd.readouterr()
 
+    assert (
+        re.search("defined \w+: \d+ bytes?", stdout) is None
+    ), "Should not find Foma output in successfull test run"
+
     assert "No FST test cases found" not in stdout, "Emtpy test suite?"
     assert "Failed" not in stdout, "Failed test suite?"
     assert re.search(r"(\d+)/\1 tests passed!", stdout)
