@@ -21,7 +21,7 @@ def test_run(capsys) -> None:
 
     with pytest.raises(SystemExit):
         with cd(FIXTURES_DIR):
-            test_dir = Path("tests")
+            test_dir = Path("test_suite_with_failures")
             assert test_dir.is_dir()
             run_tests(test_dir)
 
