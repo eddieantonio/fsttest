@@ -8,6 +8,7 @@ import pytest  # type: ignore
 
 from fsttest import FST, FailedTestResult, PassedTestResult
 from fsttest import TestCase as _TestCase
+from fsttest import TestCaseDefinitionError as _TestCaseDefinitionError
 
 
 @pytest.mark.parametrize(
@@ -69,3 +70,16 @@ def test_print_failed_test(capsys):
     assert "Given: 'a'" in captured.err
     assert "Expected: 'a'" in captured.err
     assert "got: ['b']" in captured.err
+
+
+def test_definition_should_have_upper_or_lower():
+    with pytest.raises(_TestCaseDefinitionError):
+        _TestCase.from_description({"expect": "literally anything"})
+
+
+@pytest.mark.parametrize(
+    "raw_test_case", [{"lower": "b"}, {"upper": "a"},],
+)
+def test_definition_should_have_expect(raw_test_case):
+    with pytest.raises(_TestCaseDefinitionError):
+        _TestCase.from_description(raw_test_case)
