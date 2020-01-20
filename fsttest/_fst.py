@@ -17,10 +17,16 @@ from .exceptions import FSTTestError
 
 
 class FST:
+    """
+    A FOMA-backed FST. Can apply using flookup.
+    """
+
     def __init__(self, foma_args: List[str] = None, existing_path: Path = None):
         self._directory = tempdir = TemporaryDirectory()
         base = Path(tempdir.name)
         self._path = fst_path = base / "tmp.fomabin"
+
+        ensure_foma_is_executable()
 
         if foma_args:
             subprocess.check_call(
