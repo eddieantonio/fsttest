@@ -84,7 +84,7 @@ def test_run_successfull_test_suiote(capfd) -> None:
 
     assert "No FST test cases found" not in stdout, "Emtpy test suite?"
     assert "Failed" not in stdout, "Failed test suite?"
-    assert re.search(r"(\d+)/\1 tests passed!", stdout)
+    assert re.search(r"(\d+)/\1 passed!", stdout)
 
 
 # Copied from: https://stackoverflow.com/a/24469659/6626414

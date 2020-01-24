@@ -93,7 +93,7 @@ def run_tests(test_dir: Path) -> None:
         sys.exit(EX_NO_TEST_CASES)
     else:
         print(
-            f"{term.bold}{results.n_passed}/{results.n_total} tests passed!{term.normal} ✨ 🍰 ✨"
+            f"{term.bold}{results.n_passed}/{results.n_total} passed!{term.normal} ✨ 🍰 ✨"
         )
 
 
