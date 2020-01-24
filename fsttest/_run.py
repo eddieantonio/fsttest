@@ -52,15 +52,7 @@ def run_test_suite_from_filename(test_file: Path) -> TestResults:
                 fst.path, test_case, location=test_file
             )
             if results.has_test_failures:
-                diag = fst.diagnostics
-                if diag is not None:
-                    print(fst.diagnostics, file=sys.stderr)
-                else:
-                    print(
-                        f"{term.yellow}{term.italic}No diagnostics available",
-                        f"for fst defined in {test_file}{term.normal}",
-                        file=sys.stderr,
-                    )
+                print_diagnostics(fst, test_file)
             results.update_in_place(results_from_test_case)
 
     return results
@@ -121,3 +113,15 @@ def execute_test_case(
     results.append(result)
 
     return results
+
+
+def print_diagnostics(fst: FST, test_file: Path) -> None:
+    diag = fst.diagnostics
+    if diag is not None:
+        print(fst.diagnostics, file=sys.stderr)
+    else:
+        print(
+            f"{term.yellow}{term.italic}No diagnostics available",
+            f"for fst defined in {test_file}{term.normal}",
+            file=sys.stderr,
+        )
