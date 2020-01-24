@@ -9,7 +9,14 @@ Test your Foma FSTs!
 Install
 -------
 
+For macOS users with [Homebrew](https://brew.sh/):
+
+    $ brew install eddieantonio/eddieantonio/fsttest
+
+For everybody else:
+
     $ pip install fsttest
+
 
 Usage
 -----
