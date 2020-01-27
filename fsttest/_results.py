@@ -28,7 +28,11 @@ class FailedTestResult:
     """
 
     def __init__(
-        self, given: str, expected: str, actual: Any, location: Optional[Path] = None
+        self,
+        given: str,
+        expected: List[str],
+        actual: Any,
+        location: Optional[Path] = None,
     ):
         self._location = location
         self._input = given
@@ -44,7 +48,7 @@ class FailedTestResult:
         return self._input
 
     @property
-    def expected(self) -> str:
+    def expected(self) -> List[str]:
         return self._expected
 
     @property

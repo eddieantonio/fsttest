@@ -2,7 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 from pathlib import Path
-from typing import Any, Dict, Optional, Union
+from typing import Any, Dict, List, Optional, Union
 
 from ._fst import FST
 from ._results import FailedTestResult, PassedTestResult
@@ -15,7 +15,7 @@ class TestCase:
     """
 
     def __init__(
-        self, input_: str, expected: str, direction: str, location: Optional[Path]
+        self, input_: str, expected: List[str], direction: str, location: Optional[Path]
     ):
         self.input = input_
         self.expected = expected
@@ -30,7 +30,7 @@ class TestCase:
 
         actual_transductions = transductions[self.input]
 
-        if self.expected in actual_transductions:
+        if set(self.expected) <= set(actual_transductions):
             return PassedTestResult(location=self.location)
         else:
             return FailedTestResult(
@@ -50,7 +50,20 @@ class TestCase:
         # Parse a few things
         if "expect" not in raw_test_case:
             raise TestCaseDefinitionError('Missing "expect" in test case')
-        expected = raw_test_case["expect"]
+        raw_expected = raw_test_case["expect"]
+        if isinstance(raw_expected, str):
+            expected = [raw_expected]
+        elif isinstance(raw_expected, list):
+            if len(raw_expected) == 0:
+                raise TestCaseDefinitionError(
+                    "Must provide at least one expected transduction"
+                )
+            expected = raw_expected
+        else:
+            raise TestCaseDefinitionError(
+                '"expect" MUST be either a single string or a list of strings;'
+                f"instead got {raw_expected!r}"
+            )
 
         if "upper" in raw_test_case:
             direction = "down"

@@ -26,7 +26,7 @@ def test_create_test_case(
 ):
     t = _TestCase.from_description(raw_test_case, location=location)
     assert t.input == fst_input
-    assert t.expected == expected
+    assert t.expected == [expected]
     assert t.direction == direction
     assert t.location == location
 
@@ -49,7 +49,7 @@ def test_execute_failing_test_case(a_b_transducer_path: Path):
     assert isinstance(result, FailedTestResult)
     assert result.location == test_case.location
     assert result.input == "a"
-    assert result.expected == "a"
+    assert result.expected == ["a"]
     assert result.actual == ["b"]
 
 
