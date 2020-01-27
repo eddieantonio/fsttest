@@ -21,6 +21,16 @@ def a_b_transducer_path() -> Path:
 
 
 @pytest.fixture
+def cactus_transducer_path() -> Path:
+    """
+    Transduces cactus[PL] (upper) to either cactuses or cacti.
+    """
+    path = Path(__file__).parent / "fixtures" / "cactus.fomabin"
+    assert path.exists()
+    return path
+
+
+@pytest.fixture
 def rewrite_rules_path() -> Path:
     """
     Returns the path to an XFST script with the following defined regexes:

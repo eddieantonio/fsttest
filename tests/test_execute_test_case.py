@@ -54,3 +54,13 @@ def test_invalid_test_case(a_b_transducer_path: Path):
     test_case = {"upper": "a"}
     with pytest.raises(_TestCaseDefinitionError):
         execute_test_case(a_b_transducer_path, test_case)
+
+
+def test_transduce_multiple_expects(cactus_transducer_path: Path):
+    """
+    Test a successful upper -> lower test case.
+    """
+    test_case = {"upper": "cactus[PL]", "expect": ["cactuses", "cacti"]}
+    results = execute_test_case(cactus_transducer_path, test_case)
+    assert results.n_passed == 1
+    assert results.n_total == 1

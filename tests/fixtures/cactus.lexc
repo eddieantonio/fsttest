@@ -1,0 +1,10 @@
+Multichar_Symbols
+
+[SG]
+[PL]
+
+LEXICON Root
+
+cactus[SG]:cactus #;
+cactus[PL]:cacti #;
+cactus[PL]:cactuses #;
