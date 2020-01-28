@@ -22,7 +22,7 @@ class TestCase:
         self.direction = direction
         self.location = location
 
-    def execute(self, fst: FST) -> Union["PassedTestResult", "FailedTestResult"]:
+    def execute(self, fst: FST) -> Union[PassedTestResult, FailedTestResult]:
         transductions = fst.apply([self.input], direction=self.direction)
         assert (
             self.input in transductions
