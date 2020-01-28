@@ -8,7 +8,6 @@ import re
 from pathlib import Path
 
 import pytest  # type: ignore
-
 from fsttest import run_tests
 
 FIXTURES_DIR = Path(__file__).parent / "fixtures"
@@ -66,7 +65,7 @@ def test_run_empty_test_suite(capsys) -> None:
     assert "No FST test cases found" in stdout
 
 
-def test_run_successfull_test_suiote(capfd) -> None:
+def test_run_successfull_test_suite(capfd) -> None:
     """
     Tests running this within the fixtures dir.
     """

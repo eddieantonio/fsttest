@@ -1,0 +1,12 @@
+[fst]
+fomabin = "cactus.fomabin"
+
+# Test that we can have a single expectation:
+[[tests]]
+lower = "cactus"
+expect = "cactus[SG]"
+
+# ...or multiple:
+[[tests]]
+upper = "cactus[PL]"
+expect = ["cacti", "cactuses"]
