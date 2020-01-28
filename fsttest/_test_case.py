@@ -30,6 +30,7 @@ class TestCase:
 
         actual_transductions = transductions[self.input]
 
+        assert len(self.expected) >= 1, "Must have at least on expected output"
         if set(self.expected) <= set(actual_transductions):
             return PassedTestResult(location=self.location)
         else:
