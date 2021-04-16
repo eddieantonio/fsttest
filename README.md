@@ -155,6 +155,6 @@ the FST the wordform of `kitayaan`
 License
 =======
 
-Written in 2020 by Eddie Antonio Santos <Eddie.Santos@nrc-cnrc.gc.ca>.
+Copyright © 2019, 2020 National Research Council Canada.
 
-Licensed under the terms of the Mozilla Public License 2.0 (MPL-2.0).
+Licensed under the MIT license.
